@@ -1,70 +1,62 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { Button, TextField, Checkbox, MenuItem, Select, FormControlLabel } from '@mui/material';
+import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import axios from 'axios';
 
-import { FaLinkedin, FaTwitterSquare, FaFacebookSquare } from 'react-icons/fa';
-
-import API_URL from '../../config';
 import loginBg from '../../assets/images/bg-login.jpg'
 import './login.scss';
 
-import Manager from '../manager/manager';
+// import Manager from '../manager/manager';
+import { useAuth } from '../auth/auth';
 
 
 const Login = () => {
 
-    const naviget = useNavigate();
-    const [username, setUsername] = useState('');
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('');
     const [error, setError] = useState('');
-    const [msg, setMsg] = useState('');
     const [checked, setChecked] = useState(true);
 
-    const api = axios.create({
-      baseURL: `${API_URL}`
-    })
-
-    // useEffect(() => {
-    //     let login = localStorage.getItem("login");
-    //     if(login){
-    //       naviget("/")
-    //     }
-    //     let loginStatus = localStorage.getItem("loginStatus");
-    //     if(loginStatus){
-    //       setError(loginStatus);
-    //       setTimeout(()=>{
-    //         localStorage.clear();
-    //         window.location.reload();
-    //       },3000)
-    //     }
-    //     setTimeout(()=>{
-    //       setMsg("");
-    //     },3000); 
-    //   },[msg])
+    const auth = useAuth();
 
     const handleSubmit = async ()=>{
-        alert(username)
-        alert(password)
-        if(username !== "" && password !== ""){
+        
+        if(email !== "" && password !== ""){
+  
             try {
-                const response = await api.post('http://localhost:5000/login', { username, password, role });
-                console.log(response.data.message);
-                // Traitez la réponse ici en fonction de votre logique
-                if(response.data.message === "Connexion réussie"){
-                    alert('requete réussie')
-                    /*localStorage.setItem("username", response.data.nom)
-                    console.log(response.data.nom)
-                    localStorage.setItem("username", username);
-                    setTimeout(() => {
-                        localStorage.setItem("login", true);
-                        naviget("/manager");
-                    }, 5000)*/
-                }else if(response.data.success === false){
-                    console.log(response.data.message)
-                }
+                await axios.post('http://localhost:5000/api/users/login', { 
+                        email: email, 
+                        password: password
+                })
+                .then( response =>{
+                    if(response.data.message === "Manager inscrit" || response.data.message === "Client inscrit"){
+                        setEmail("");
+                        setPassword("");
+              
+                        setTimeout(() => {
+                            if(response.data.role === 'owner'){
+                                auth.loginOkay(0);
+                                navigate("/owners", {replace: true}); 
+                            } else if( response.data.role === 'manager'){
+                                auth.loginOkay(response.data.managerId);
+                                navigate("/manager", {replace: true}) 
+                            } else if(response.data.role === 'customer'){
+                                auth.loginOkay(response.data.customerId);
+                                navigate("/customers", {replace: true}) 
+                            } else {
+                                navigate("*") 
+                            }
+                        }, 1500);
+                    } else if(response.data.message === "Paramètres manquants"){
+                        setError("Paramètres manquants");
+                    } else if(response.data.message === "Password incorrect"){
+                        setError("Password incorrect");
+                    } else if(response.data.message === "User non existant dans la base de données") {
+                        setError("User inexistant ");
+                    } 
+                })
             } catch (error) {
                 console.error('Erreur de connexion', error);
             }
@@ -75,13 +67,12 @@ const Login = () => {
     }
 
     const handleChange = (e, type) => {
-        alert('salut')
         switch(type){
-          case "username":
+          case "email":
             setError("");
-            setUsername(e.target.value);
+            setEmail(e.target.value);
             if(e.target.value === ""){
-              setError("Username non renseigné");
+              setError("Email non renseigné");
             }
             break;
           case "password":
@@ -98,37 +89,35 @@ const Login = () => {
       const handleCheckChange = (event) => {
         setChecked(event.target.checked);
       };
-
-      const handleRoleChange = (event) => {
-        setRole(event.target.value);
-      };
+      
+      const handleNavigate = ()=>{
+            setTimeout(()=>{
+                navigate("/register", {replace: true})  
+            }, 1500)
+      }
 
   return (
     <section>
         <div className='imgBx'>
-            <img src={loginBg}/>
+            <img src={loginBg} alt=''/>
         </div>
         <div className='contentBx'>
             <div className='formBx'>
                 <h2>Connectez-vous</h2>
-                <p>{ error !== "" ? <span className="error">{error}</span> : <span>{msg}</span> }</p>
-                <form onSubmit={handleSubmit}>
+                <p>{ error !== "" ? <span className="error">{error}</span> : <span></span> }</p>
+                <form>
                     <div className='inputBx'>
-                        {/* <span>Username</span> */}
-
-
                         <TextField 
-                            label = 'Username'
+                            label = 'Email'
                             variant = 'outlined'
-                            type='text' 
+                            type='email' 
                             required
-                            value={username} 
+                            value={email} 
                             className='textfield'
-                            onChange={(e) => handleChange(e,"username")}
+                            onChange={(e) => handleChange(e,"email")}
                         />
                     </div>
                     <div className='inputBx'>
-                        {/* <span>Mot de Passe</span> */}
                         <TextField 
                             label = 'Mot de Passe'
                             type='password'  
@@ -137,55 +126,24 @@ const Login = () => {
                             className='textfield'
                             onChange={(e) => handleChange(e,"password")}/>
                     </div>
-                    <div className='inputBx'>
-                        {/* <span>Role</span> */}
-                            {/* <InputLabel id="demo-simple-select-label">Role  </InputLabel> */}
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={role}
-                                autoWidth
-                                label="Role"
-                                onChange={(event) => handleRoleChange(event)}
-                            >
-                                <MenuItem value={1}>Manager</MenuItem>
-                                <MenuItem value={2}>Owner</MenuItem>
-                            </Select>
-                    </div>
                     <div className='remember'>
-                        <FormControlLabel control={<Checkbox defaultChecked />} label="Se souvenir de moi" />
-                        {/* <Checkbox
-                            checked={checked}
-                            onChange={handleCheckChange}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                            className='textfield'
-                            label=""
-                        /> */}
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Se souvenir de moi" onChange={(event) => handleCheckChange(event)}/>
                     </div>
                     <div className='inputBx'>
                         <Button 
-                            type='submit' 
                             variant='contained'
-                            color='success' 
                             className='buttonZone'
+                            onClick = {handleSubmit}
                         >Se connectez</Button>
-                    </div>
-                    
+                    </div> 
                     <div className='inputBx'>
                         <Button 
-                            type='submit' 
                             variant='contained'
-                            color='success' 
                             className='buttonZone'
+                            onClick = {handleNavigate}
                         >Se connecter en tant qu'acheteur</Button>
                     </div>
                 </form> 
-                <h3>Social Media</h3>
-                <ul className='sci'>
-                    <li><FaFacebookSquare className='icone'/></li>
-                    <li><FaTwitterSquare className='icone'/></li>
-                    <li><FaLinkedin className='icone'/></li>
-                </ul>
             </div>
         </div>
     </section>

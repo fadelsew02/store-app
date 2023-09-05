@@ -1,0 +1,85 @@
+
+// @function myFunction($value){
+//     .icone{
+//         padding: $value / 2;
+//     }
+//     
+//     .title{
+//         font-size: $value;
+//     }
+// }
+
+
+.main-financeDiv{
+    width: 90%;
+    height: 30vh;
+    display: flex;
+
+    .capital{
+        width: calc(100% / 3);
+        border-right: 1px solid black ;
+        background-color: #888ECF;
+        
+    .icone{
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .title{
+        font-size: 30px;
+        margin-right: 20px;
+    }
+    
+    .finance-part{
+            font-size: 45px;
+        }
+        
+        // @include myFunction(40px);
+    }
+
+
+    .depenses{
+        width: calc(100% / 3);
+        border-right: 1px solid black ;
+        background-color: #888ECF;
+        
+    .icone{
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .title{
+        font-size: 30px;
+        margin-right: 20px;
+    }
+    
+    .finance-part{
+            font-size: 45px;
+        }
+        
+        // @include myFunction(40px);
+
+    }
+
+
+    .solde-div{
+        width: calc(100% / 3);
+        border-right: 1px solid black ;
+        background-color: #888ECF;
+        
+        .icone{
+            padding: 20px;
+        }
+        
+        .title{
+            font-size: 30px;
+            margin-right: 20px;
+        }
+        
+        .finance-part{
+            font-size: 45px;
+        }
+        
+        // @include myFunction(40px);
+    }
+}

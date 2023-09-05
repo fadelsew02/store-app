@@ -1,48 +1,64 @@
 const express = require('express');
 const cors = require('cors');
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
+const bodyParser = require('body-parser'); 
+const apiRouter = require('./apiRouter').router;
+const db = require('./models/db');
+const sequelize = require('./models/index')
+
+
+const insertItems = require('./scripts/insertItems');
+const insertCategories = require('./scripts/insertCategories');
+const insertCustomers = require('./scripts/insertCustomers');
+const insertInventory = require('./scripts/insertInventory');
+const insertOrders = require('./scripts/insertOrders');
+const insertStores = require('./scripts/insertStores');
+const insertSuppliers = require('./scripts/insertSuppliers');
+const insertManagers = require('./scripts/insertManagers');
+const insertStockData = require('./scripts/insertStocks');
+const insertFinanceData = require('./scripts/insertFinance');
 
 const app = express();
 
-const corsOptions = {
-    origin: 'http://localhost:3000', // Remplacez par l'URL de votre application React en production
-    optionsSuccessStatus: 200
-  };
+// const corsOptions = {
+//     origin: 'http://localhost:3000', // Remplacez par l'URL de votre application React en production
+//     optionsSuccessStatus: 200
+//   };
 
 // Utilisation du middleware CORS
-app.use(cors(corsOptions));
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// Configuration de la connexion à la base de données PostgreSQL
-const pool = new Pool({
-  user: 'fadelsew',
-  host: 'localhost',
-  database: 'tpstores',
-  password: 'azerty',
-  port: 5432, // Port par défaut de PostgreSQL
-});
+app.use('/api/', apiRouter);
 
-// Route pour vérifier les informations de connexion
-app.post('http://localhost:5000/login', async (req, res) => {
-  const { username, password } = req.body;
-
+(async () => {
   try {
-    const result = await pool.query(
-      'SELECT * FROM users WHERE username = $1 AND password = $2 AND role = $3',
-      [username, password, role]
-    );
+      // Connectez-vous à la base de données
+      await sequelize.authenticate();
+      console.log('Connexion à la base de données établie avec succès.');
 
-    if (result.rowCount === 1) {
-      res.json({ success: true, message: 'Connexion réussie', nom: username });
-    } else {
-      res.status(401).json({ success: false, message: 'Informations de connexion incorrectes', nom: '' });
-    }
+      await sequelize.sync({force: true})
+
+      // Exécutez les scripts d'insertion
+      await insertCategories();
+      await insertManagers();
+      await insertSuppliers();
+      await insertCustomers();
+      await insertStores();
+      await insertItems();
+      await insertInventory();
+      await insertOrders();
+      await insertStockData();
+      await insertFinanceData();
+      
+      // Fermez la connexion à la base de données
   } catch (error) {
-    console.error('Erreur lors de la vérification des informations de connexion :', error);
-    res.status(500).json({ success: false, message: 'Erreur interne du serveur' });
+    await sequelize.close();
+    console.log('Connexion à la base de données fermée.');
+      console.error('Une erreur s\'est produite :', error);
   }
-});
-
+})();
 // Lancement du serveur
 const port = 5000;
 app.listen(port, () => {

@@ -1,0 +1,729 @@
+const Items = require('../models/items'); // Assurez-vous d'importer les modèles correctement
+const Categories = require('../models/categorie'); // Assurez-vous d'importer les modèles correctement
+const Stores = require('../models/stores'); // Assurez-vous d'importer les modèles correctement
+
+const insertItemData = async () => {
+    try {
+
+        const categories = await Categories.findAll();
+        const stores = await Stores.findAll();
+
+        const itemData = [
+            {
+                item_name: 'Toile vierge',
+                category_id: categories[7].category_id,
+                store_id: stores[0].store_id,
+                price: 9.99,
+                url_photo
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Pinceaux a peinture',
+                category_id: categories[7].category_id,
+                store_id: stores[1].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Kit de sculpture',
+                category_id: categories[7].category_id,
+                store_id: stores[2].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Palettes de peinture',
+                category_id: categories[7].category_id,
+                store_id: stores[3].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Set Aquarelles',
+                category_id: categories[7].category_id,
+                store_id: stores[4].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Chevalet en bois',
+                category_id: categories[7].category_id,
+                store_id: stores[5].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Marqueurs permanents',
+                category_id: categories[7].category_id,
+                store_id: stores[6].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Canevas pre-imprime',
+                category_id: categories[7].category_id,
+                store_id: stores[7].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Easels pliants',
+                category_id: categories[7].category_id,
+                store_id: stores[8].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Croquettes pour chiens',
+                category_id: categories[8].category_id,
+                store_id: stores[9].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Litiere pour chat',
+                category_id: categories[8].category_id,
+                store_id: stores[0].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Collier pour chien',
+                category_id: categories[8].category_id,
+                store_id: stores[1].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Jouet à mâcher',
+                category_id: categories[8].category_id,
+                store_id: stores[2].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Harnais pour chat',
+                category_id: categories[8].category_id,
+                store_id: stores[3].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Aquarium en verre',
+                category_id: categories[8].category_id,
+                store_id: stores[4].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Nourriture pour poisson',
+                category_id: categories[8].category_id,
+                store_id: stores[5].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Cage pour oiseau',
+                category_id: categories[8].category_id,
+                store_id: stores[6].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Accessoires pour rongeurs',
+                category_id: categories[8].category_id,
+                store_id: stores[7].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Terrarium reptile',
+                category_id: categories[8].category_id,
+                store_id: stores[8].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Tournevis multifonctions',
+                category_id: categories[9].category_id,
+                store_id: stores[9].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Marteau en acier',
+                category_id: categories[9].category_id,
+                store_id: stores[0].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Scie circulaire',
+                category_id: categories[9].category_id,
+                store_id: stores[1].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Niveau à bulle',
+                category_id: categories[9].category_id,
+                store_id: stores[2].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Pince réglable',
+                category_id: categories[9].category_id,
+                store_id: stores[3].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Ruban à mesurer',
+                category_id: categories[9].category_id,
+                store_id: stores[5].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Perceuse électrique',
+                category_id: categories[9].category_id,
+                store_id: stores[6].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Ciseaux à bois',
+                category_id: categories[9].category_id,
+                store_id: stores[7].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Ponceuse orbitale',
+                category_id: categories[9].category_id,
+                store_id: stores[8].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Etabli pliable',
+                category_id: categories[9].category_id,
+                store_id: stores[9].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Ballon de soccer',
+                category_id: categories[5].category_id,
+                store_id: stores[0].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Raquette de tennis',
+                category_id: categories[5].category_id,
+                store_id: stores[1].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Velo de montagne',
+                category_id: categories[5].category_id,
+                store_id: stores[2].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Tapis de yoga',
+                category_id: categories[5].category_id,
+                store_id: stores[3].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Haltères ajustables',
+                category_id: categories[5].category_id,
+                store_id: stores[4].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Chaussures de courses',
+                category_id: categories[5].category_id,
+                store_id: stores[5].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Planche de surf',
+                category_id: categories[5].category_id,
+                store_id: stores[6].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Gants de boxe',
+                category_id: categories[5].category_id,
+                store_id: stores[7].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Corde à sauter',
+                category_id: categories[5].category_id,
+                store_id: stores[8].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Equipements de musculation',
+                category_id: categories[5].category_id,
+                store_id: stores[9].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Vitamines',
+                category_id: categories[6].category_id,
+                store_id: stores[0].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Thé vert biologique',
+                category_id: categories[6].category_id,
+                store_id: stores[1].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Pillules de probiotiques',
+                category_id: categories[6].category_id,
+                store_id: stores[2].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Balance numérique',
+                category_id: categories[6].category_id,
+                store_id: stores[3].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Huile oméga-3',
+                category_id: categories[6].category_id,
+                store_id: stores[4].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Barres protéinées',
+                category_id: categories[6].category_id,
+                store_id: stores[5].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Tapis Yoga',
+                category_id: categories[6].category_id,
+                store_id: stores[6].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Infusion de Camomille',
+                category_id: categories[6].category_id,
+                store_id: stores[7].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Cachet de magnésium',
+                category_id: categories[6].category_id,
+                store_id: stores[8].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Gourde Eau reutilisable',
+                category_id: categories[6].category_id,
+                store_id: stores[9].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Crayons à sourcils',
+                category_id: categories[3].category_id,
+                store_id: stores[0].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Fond de teint liquide',
+                category_id: categories[3].category_id,
+                store_id: stores[1].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Rouge à lèvres mat',
+                category_id: categories[3].category_id,
+                store_id: stores[2].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Masques facial hydratant',
+                category_id: categories[3].category_id,
+                store_id: stores[3].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Vernis à ongles rouge',
+                category_id: categories[3].category_id,
+                store_id: stores[4].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Mascara allongeant',
+                category_id: categories[3].category_id,
+                store_id: stores[5].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Gel douche parfumant',
+                category_id: categories[3].category_id,
+                store_id: stores[6].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Crèmes anti rides',
+                category_id: categories[3].category_id,
+                store_id: stores[7].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Shampooing nourrissant',
+                category_id: categories[3].category_id,
+                store_id: stores[8].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Eponges de maquillage',
+                category_id: categories[3].category_id,
+                store_id: stores[9].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Coussin decoratif',
+                category_id: categories[4].category_id,
+                store_id: stores[1].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Plante interieur',
+                category_id: categories[4].category_id,
+                store_id: stores[0].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Bougie parfumee',
+                category_id: categories[4].category_id,
+                store_id: stores[2].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Cadre photo en bois',
+                category_id: categories[4].category_id,
+                store_id: stores[3].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Tapis en coton',
+                category_id: categories[4].category_id,
+                store_id: stores[4].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Lampe de table moderne',
+                category_id: categories[4].category_id,
+                store_id: stores[5].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Coffret de rangement',
+                category_id: categories[4].category_id,
+                store_id: stores[6].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Miroir mural en metal',
+                category_id: categories[4].category_id,
+                store_id: stores[7].store_id,
+                price: 9.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Horloge mural',
+                category_id: categories[4].category_id,
+                store_id: stores[8].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Panier de rangement en osier',
+                category_id: categories[4].category_id,
+                store_id: stores[9].store_id,
+                price: 11.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Pain de ble entier',
+                category_id: categories[2].category_id,
+                store_id: stores[1].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Lait  demi ecreme',
+                category_id: categories[2].category_id,
+                store_id: stores[0].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Pates de ble dur',
+                category_id: categories[2].category_id,
+                store_id: stores[4].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Yaourt nature',
+                category_id: categories[2].category_id,
+                store_id: stores[3].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Pommes de terre',
+                category_id: categories[2].category_id,
+                store_id: stores[2].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Jus orange frais',
+                category_id: categories[2].category_id,
+                store_id: stores[6].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Cereales au miel',
+                category_id: categories[2].category_id,
+                store_id: stores[7].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Cafe moulu',
+                category_id: categories[2].category_id,
+                store_id: stores[5].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Thon en conserve',
+                category_id: categories[2].category_id,
+                store_id: stores[9].store_id,
+                price: 4.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Chocolat noir',
+                category_id: categories[2].category_id,
+                store_id: stores[8].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Smartphone',
+                category_id: categories[1].category_id,
+                store_id: stores[0].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Ordinateur portable',
+                category_id: categories[1].category_id,
+                store_id: stores[1].store_id,
+                price: 26.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Casque sans fil',
+                category_id: categories[1].category_id,
+                store_id: stores[2].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'enceinte blutooth',
+                category_id: categories[1].category_id,
+                store_id: stores[3].store_id,
+                price: 24.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Camera action',
+                category_id: categories[1].category_id,
+                store_id: stores[4].store_id,
+                price: 33.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Tablette android',
+                category_id: categories[1].category_id,
+                store_id: stores[5].store_id,
+                price: 40.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Ecouteurs sans fil',
+                category_id: categories[1].category_id,
+                store_id: stores[6].store_id,
+                price: 43.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'Console de jeu',
+                category_id: categories[1].category_id,
+                store_id: stores[7].store_id,
+                price: 24.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Imprimante multifonction',
+                category_id: categories[1].category_id,
+                store_id: stores[8].store_id,
+                price: 13.99,
+                stock_quantity: 50
+            },
+            {
+                item_name: 'TV LED',
+                category_id: categories[1].category_id,
+                store_id: stores[9].store_id,
+                price: 22.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Chemises a carreaux',
+                category_id: categories[0].category_id,
+                store_id: stores[1].store_id,
+                price: 41.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Robe ete',
+                category_id: categories[0].category_id,
+                store_id: stores[0].store_id,
+                price: 15.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Pantalons en jeans',
+                category_id: categories[0].category_id,
+                store_id: stores[2].store_id,
+                price: 12.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'TShirts',
+                category_id: categories[0].category_id,
+                store_id: stores[3].store_id,
+                price: 19.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Veste en cuir',
+                category_id: categories[0].category_id,
+                store_id: stores[4].store_id,
+                price: 17.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Chaussures de sports',
+                category_id: categories[0].category_id,
+                store_id: stores[5].store_id,
+                price: 20.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Jupes plissees',
+                category_id: categories[0].category_id,
+                store_id: stores[6].store_id,
+                price: 41.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Chemisiers en soies',
+                category_id: categories[0].category_id,
+                store_id: stores[7].store_id,
+                price: 12.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Costume elegant',
+                category_id: categories[0].category_id,
+                store_id: stores[8].store_id,
+                price: 14.99,
+                stock_quantity: 30
+            },
+            {
+                item_name: 'Jeans skinny',
+                category_id: categories[0].category_id,
+                store_id: stores[9].store_id,
+                price: 9.99,
+                stock_quantity: 30
+            }
+
+        ];
+
+
+        const itemsPerStore = Math.ceil(itemData.length / stores.length);
+        let currentIndex = 0;
+
+        for (const store of stores) {
+            const itemsForStore = itemData.slice(currentIndex, currentIndex + itemsPerStore);
+            currentIndex += itemsPerStore;
+
+            await Items.bulkCreate(itemsForStore.map(item => ({
+                ...item,
+                store_id: store.store_id
+            })));
+        }
+
+        console.log('Data inserted successfully.');
+    } catch (error) {
+        console.error('Error inserting data:', error);
+    }
+};
+
+module.exports = insertItemData;
