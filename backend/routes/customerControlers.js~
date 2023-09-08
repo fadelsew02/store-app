@@ -1,5 +1,5 @@
 // const express = require('express');
-const Stocks = require('../models/stocks');
+const Customers = require('../models/stocks');
 const sequelize = require('../models/index'); // Assurez-vous d'importer correctement votre instance Sequelize
 const { QueryTypes } = require('sequelize');
 
@@ -15,7 +15,7 @@ module.exports = {
                     s.quantity, 
                     i.item_name, 
                     i.price,
-                    
+                    i.url_photo
                 FROM 
                     "Stocks" AS s 
                 INNER JOIN 
@@ -31,22 +31,33 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ 'message': error });
         }
-    }
+    },
     
-    // getAllId: async (req, res) => {
+    updatePriceQuantity: async (req, res) => {
+        const id_edited = req.params.idToEdit;
+
+        const { quantity } = req.body;
+        console.log(req.body)
         
-    //     const itemName = req.params.itemName;
-    //     try {
-    //         const item_id = await Items.findOne({
-    //             attributes : ['item_id'],
-    //             where: {
-    //                 item_name: itemName
-    //             }
-    //         });
-    //         return res.status(200).json({'message': "L'id de l'item a été retrouvé avec succès", 'itemId': item_id});
-    //     } catch (error) {
-    //         return res.status(500).json({ 'message': error });
-    //     }
-    // }
+        try {
+            const articleFound = await Stocks.findOne({
+                where: { stock_id: id_edited}
+            })
+            
+            if(articleFound){
+                const updates = {};
+                    // if (price) {
+                    //     updates.price = price;
+                    // }
+                    if (quantity) {
+                        updates.quantity = quantity;
+                    }
+                    articleFound.update(updates);
+            } 
+             return res.status(201).json({'message': 'Les informations ont été update avec succès', newArticle: articleFound});
+        } catch (error) {
+            return res.status(500).json({'message': error})
+        }
+    }
 }
 

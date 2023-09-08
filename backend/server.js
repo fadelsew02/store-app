@@ -12,6 +12,7 @@ const insertCategories = require('./scripts/insertCategories');
 const insertCustomers = require('./scripts/insertCustomers');
 const insertInventory = require('./scripts/insertInventory');
 const insertOrders = require('./scripts/insertOrders');
+const insertOrderDetailsData = require('./scripts/insertOrderDetails');
 const insertStores = require('./scripts/insertStores');
 const insertSuppliers = require('./scripts/insertSuppliers');
 const insertManagers = require('./scripts/insertManagers');
@@ -50,6 +51,7 @@ app.use('/api/', apiRouter);
       await insertInventory();
       await insertOrders();
       await insertStockData();
+      await insertOrderDetailsData();
       await insertFinanceData();
       
       // Fermez la connexion à la base de données

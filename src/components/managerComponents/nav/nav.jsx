@@ -53,7 +53,7 @@ const Nav = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to='commandes' className='lien'>
+                        <NavLink to='history' className='lien'>
                             <span className='icon'><FaBox style={{fontSize: '24px'}} /></span>
                             <span className='title'>Historique des commandes</span>
                         </NavLink>
