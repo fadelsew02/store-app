@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { postEntity } from '../../utils/requests';
 
 import { Button, TextField, MenuItem, Select } from '@mui/material';
-import axios from 'axios';
+// import axios from 'axios';
 
 import loginBg from '../../assets/images/bg-login.jpg'
 import './register.scss';
@@ -18,48 +19,34 @@ const Register = () => {
     const [role, setRole] = useState(1);
     const [error, setError] = useState('');
 
-    const handleSubmit = async ()=>{
-        if(nom !== "" && prenom !== "" && email !== "" && username !== "" && password !== ""){
-            try {
-                axios.post('http://localhost:5000/api/users/register', { 
-                        nom: nom, 
-                        prenom: prenom, 
-                        email: email, 
-                        password: password, 
-                        username: username
-                     })
-                    .then((response) => {
-                        if(response.data.message === "Insertion réussie dans la base de données"){
-                            setNom("");
-                            setUsername("");
-                            setEmail("");
-                            setPassword("");
-                            setPrenom("");
-
-                            setTimeout(() => {
-                                naviget("/loading") //je dois le rediriger vers une page de loading
-                            }, 1500);
-                        } else if(response.data.message === "Paramètres manquants"){
-                            setError("Paramètres manquants");
-                        } else if(response.data.message === "Username invalide (doit être compris entre 5 - 12 caractères)"){
-                            setError("Username invalide (doit être compris entre 5 - 12 caractères)");
-                        } else if(response.data.message === "Email non valide") {
-                            setError("Email non valide");
-                        } else if(response.data.message === "Password invalide (entre 4 - 8 caractères incluant un nombre au moins)"){
-                            setError("Password invalide (entre 4 - 8 caractères incluant un nombre au moins)");
-                        } else if(response.data.message === "Ce username ou email est déjà utilisé"){
-                            setError("Ce username ou email est déjà utilisé");
-                        }
-                    })
-            } catch (error) {
-                console.error("Erreur d'enregistrement: ", error);
+    const handleSubmit = async () => {
+        if (nom !== "" && prenom !== "" && email !== "" && username !== "" && password !== "") {
+          const data = {
+            nom: nom,
+            prenom: prenom,
+            email: email,
+            password: password,
+            username: username
+          };
+      
+          try {
+            const response = await postEntity('/users/register', data);
+      
+            if (response.data.success === true) {
+              setTimeout(() => {
+                naviget("/loading"); //je dois le rediriger vers une page de loading
+              }, 1500);
+            } else if(response.data.success === false) {
+                setError(response.data.message)
             }
-        }else{
-            setError("All field are required ! ")
+          } catch (error) {
+            console.error("Erreur d'enregistrement: ", error);
+          }
+        } else {
+          setError("All field are required ! ");
         }
-
-    }
-
+      };
+      
     const handleChange = (e, type) => {
         switch(type){
             case "username":

@@ -29,20 +29,19 @@ module.exports = {
     return (authorization != null) ? authorization.replace('Bearer ', '') : null;
   },
   
-  getUserId: function(authorization) {
+  getUserId: function(token) {
   
   let user = {
       userId: -1,
       userRole: 2
   }
-  console.log(authorization)
+  // console.log(token)
   
-    const token = module.exports.parseAuthorization(authorization);
+    // const token = module.exports.parseAuthorization(authorization);
     if(token != null) {
       try {
         const jwtToken = jwt.verify(token, JWT_SIGN_SECRET);
         if(jwtToken != null)
-            console.log('dedans')
             user.userRole = jwtToken.userRole;
             user.userId = jwtToken.userId;
       } catch(err) { 

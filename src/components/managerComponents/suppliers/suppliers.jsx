@@ -1,55 +1,49 @@
-import { Box, Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip , Modal} from '@mui/material'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react';
+import { getEntity, removeEntity } from '../../../utils/requests';
+import { Box, Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip, Modal } from '@mui/material';
 
 import './suppliers.scss';
 
-
 const Suppliers = () => {
+  const [suppliers, setSuppliers] = useState([]);
+  const [error, setError] = useState('');
+  const [idSupp, setIdSupp] = useState(null);
 
-    const [suppliers, setSuppliers] = useState([]);
-    const [supp, setSupp] = useState([]);
-    const [error, setError] = useState('');
-    const [idSupp, setIdSupp] = useState(null);
-
-    useEffect(()=>{
-        async function fetchData() {
-          await axios.get('http://localhost:5000/api/suppliers/display')
-              .then(response => {
-                  if (response.data.message === "Tous les fournisseurs ont été récupérés avec succès") {
-                      setSupp(response.data.donnees);
-                  } else {
-                      setError('Erreur lors de la récupération des fournisseurs')
-                  }
-              })
-              .catch(err => console.error(err));
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getEntity('/suppliers/display');
+        if (response.data.success === true) {
+          setSuppliers(response.data.results);
+        } else {
+          setError('Erreur lors de la récupération des fournisseurs');
         }
-
-        fetchData();
-
-    },[]);
-    
-
-
-    useEffect(()=>{
-        if(supp && supp.length > 0){
-            setSuppliers(supp)
-        }  
-    },[supp])
-
-    const handleDelete = () => {
-         axios.delete(`http://localhost:5000/api/suppliers/delete/${idSupp}`)
-              .then(response => {
-                 if(response.data.message === 'Fournisseur supprimé avec succès'){
-                   alert('Fournisseur supprimé avec succès');
-                 } else {
-                   alert('Une erreur est survenue lors de la suppression')
-                 }
-              })
-              .catch(error => console.error(error));
-              handleClose();
-
+      } catch (error) {
+        console.error('Erreur lors de la récupération des fournisseurs :', error);
+        setError('Erreur lors de la récupération des fournisseurs');
+      }
     }
+
+    fetchData();
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      const response = await removeEntity('/suppliers/delete', idSupp);
+      if (response.data.success === true) {
+        handleClose();
+        // Mettez à jour la liste des fournisseurs après la suppression
+        setSuppliers((prevSuppliers) =>
+          prevSuppliers.filter((supplier) => supplier.supplier_id !== idSupp)
+        );
+      } else {
+        setError('Une erreur est survenue lors de la suppression');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression du fournisseur :', error);
+      setError('Une erreur est survenue lors de la suppression');
+    }
+  };
     
     
     const findTooltip = (id_category) => {
@@ -136,7 +130,7 @@ const Suppliers = () => {
                         <Button variant="contained" color="error" onClick={id => handleOpen(supplier.supplier_id)}>Supprimer </Button>
                       </TableCell>
                     </TableRow>
-                  )) : <p>{error || 'Chargement en cours '}</p>}
+                  )) : <TableRow>{error || 'Chargement en cours '}</TableRow>}
                 </TableBody>
               </Table>
             </TableContainer>

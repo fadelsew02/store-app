@@ -1,10 +1,8 @@
-// Imports
 const bcrypt = require('bcrypt');
 const jwtUtils = require('../utils/jwt.utils');
-const Users = require('../models/Users');
 const Managers = require('../models/managers');
 const Customers = require('../models/customers');
-const asyncLib = require('async');
+// const asyncLib = require('async');
 const { Op } = require('sequelize'); 
 
 // Constants
@@ -18,19 +16,19 @@ module.exports = {
         const { nom, prenom, email, password, username } = req.body;
 
         if (nom == null || prenom == null || email == null || password == null || username == null ) {
-            return res.json({ 'message': 'Paramètres manquants' });
+            return res.status(402).json({ 'message': 'Paramètres manquants' });
         }
 
         if (username.length >= 13 || username.length <= 4) {
-            return res.json({ 'message': 'Username invalide (doit être compris entre 5 - 12 caractères)' });
+            return res.status(402).json({ 'message': 'Username invalide (doit être compris entre 5 - 12 caractères)' });
         }
 
         if (!EMAIL_REGEX.test(email)) {
-            return res.json({ 'message': 'Email non valide' });
+            return res.status(402).json({ 'message': 'Email non valide' });
         }
 
         if (!PASSWORD_REGEX.test(password)) {
-            return res.json({ 'message': 'Password invalide (entre 4 - 8 caractères incluant un nombre au moins)' });
+            return res.status(402).json({ 'message': 'Password invalide (entre 4 - 8 caractères incluant un nombre au moins)' });
         }
 
         try {
@@ -41,7 +39,7 @@ module.exports = {
             });
 
             if (customerFound) {
-                return res.json({ 'message': 'Ce username ou email est déjà utilisé' });
+                return res.status(405).json({ 'message': 'Ce username ou email est déjà utilisé' });
             }
     
             const bcryptedPassword = await bcrypt.hash(password, 5);
@@ -54,19 +52,18 @@ module.exports = {
                 prenom: prenom
             });
     
-            return res.json({
-                'customerId': newCustomer.customer_id,
-                'message':'Insertion réussie dans la base de données'
+            return res.status(201).json({
+                'results': newCustomer.customer_id,
             });
         } catch (error) {
-            return res.json({ 'message': 'cannot add user' });
+            return res.status(401).json({ 'message': 'cannot add user' });
         }
     },
 
     login: async function (req, res) {
         const { password, email } = req.body;
         if (email == null || password == null) {
-            return res.json({ 'message': 'Paramètres manquants' });
+            return res.status(403).json({ 'message': 'Paramètres manquants' });
         }
         try {
         
@@ -83,72 +80,73 @@ module.exports = {
                 
                 if (resBycrypt) {
                     return res.json({
-                        'managerId': managerFound.manager_id,
+                        'results': managerFound.manager_id,
                         'token': jwtUtils.generateTokenForUser(managerFound, '1'),
-                        'message': 'Manager inscrit',
                         'role': 'manager'
                     });
                 } else {
-                    return res.json({ 'message': 'Password incorrect' });
+                    return res.status(402).json({ 'message': 'Password incorrect' });
                 }
             }  else if (customerFound) {
                  const resBycrypt = await bcrypt.compare(password, customerFound.password);
                 
                 if (resBycrypt) {
                     return res.json({
-                        'customerFound': customerFound.customer_id,
+                        'results': customerFound.customer_id,
                         'token': jwtUtils.generateTokenForUser(customerFound, '2'),
-                        'message': 'Client inscrit',
                         'role': 'customer'
                     });
                 } else {
-                    return res.json({ 'message': 'Password incorrect' });
+                    return res.status(402).json({ 'message': 'Password incorrect' });
                 }
             }  else {
-                return res.json({ 'message': 'User non existant dans la base de données' });
+                return res.status(402).json({ 'message': 'User non existant dans la base de données' });
             }
         } catch (error) {
-            return res.json({ 'message': 'Impossible de verifier cet user' });
+            return res.status(401).json({ 'message': 'Impossible de verifier cet user' });
         }
     },
     getUserProfile: async function(req, res) {
         // Getting auth header
-        const headerAuth  = req.headers['authorization'];
-        const user = jwtUtils.getUserId(headerAuth);
+        // const headerAuth  = req.headers['Authorization'];
+        const user = jwtUtils.getUserId(req.params.token);
         
-        console.log(headerAuth)
+        // console.log(headerAuth)
+        // console.log(req.params.token)
+        
+        console.log(user)
 
         if (user.userId < 0)
-          return res.json({ 'error': 'wrong token' });
+          return res.status(401).json({ 'error': 'wrong token' });
           
           
-        if(user.userRole == 1){
+        if(user.userRole === 1){
             try{
                 const manager = await Managers.findOne({
-                    attributes: [ 'manager_username', 'manager_firstname', 'manager_surname', 'manager_email', 'manager_contact'],
+                    attributes: [ 'manager_username', 'manager_firstname', 'manager_surname', 'manager_email', 'manager_phone'],
                     where: { manager_id: user.userId }
                   });
               if(manager){
-                return res.json({'username': manager.manager_username, 'nom': manager.manager_surname, 'prenom': manager.manager_firstname, 'email': manager.manager_email, 'contact': manager.manager_contact, 'message': 'Récupération réussie des informations'});
+                return res.status(201).json({'results': manager});
               } else {
-                return res.json({ 'message': 'user not found' });
+                return res.status(404).json({ 'message': 'user not found' });
               }
             } catch (error) {
-                return  res.json({ 'message': 'cannot fetch user' });
+                return  res.status(401).json({ 'message': 'cannot fetch user' });
             }
-        } else if( user.userRole == 2){
+        } else if( user.userRole === 2){
             try{
                 const customer = await Customers.findOne({
                     attributes: [ 'username', 'nom', 'prenom', 'email'],
                     where: { customer_id: user.userId }
                   });
               if(customer){
-                return res.json({'username': customer.username, 'nom': customer.nom, 'prenom': customer.prenom, 'email': customer.email, 'message': 'Récupération réussie des informations'});
+                return res.status(201).json({'results': customer});
               } else {
-                return res.json({ 'message': 'user not found' });
+                return res.status(404).json({ 'message': 'user not found' });
               }
             } catch (error) {
-                return  res.json({ 'message': 'cannot fetch user' });
+                return  res.status(401).json({ 'message': 'cannot fetch user' });
             }
         }
 
@@ -181,7 +179,7 @@ module.exports = {
         
                     managerFound.update(updates)
                     .then(updatedUser => {
-                        res.status(201).json({'message': 'Profil User mis à jour'});
+                        res.status(201).json({'results': ''});
                     })
                     .catch(err => {
                         res.status(500).json({ 'message': 'Le profil ne peut pas etre mis à jour' });
@@ -191,7 +189,7 @@ module.exports = {
                 }
             })
             .catch(err => {
-                res.status(500).json({ 'message': 'Impossible de contacter le serveur' });
+                res.status(401).json({ 'message': 'Impossible de contacter le serveur' });
             });
         } else if (user.userRole == 2) {
             const customerFound = await Customers.findOne({
@@ -213,7 +211,7 @@ module.exports = {
         
                     customerFound.update(updates)
                     .then(updatedUser => {
-                        res.status(201).json({'message': 'Profil User mis à jour'});
+                        res.status(201).json({'results': ''});
                     })
                     .catch(err => {
                         res.status(500).json({ 'message': 'Le profil ne peut pas etre mis à jour' });
@@ -223,7 +221,7 @@ module.exports = {
                 }
             })
             .catch(err => {
-                res.status(500).json({ 'message': 'Impossible de contacter le serveur' });
+                res.status(401).json({ 'message': 'Impossible de contacter le serveur' });
             });
         }
     }

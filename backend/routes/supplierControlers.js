@@ -1,4 +1,4 @@
-const express = require('express');
+// const express = require('express');
 const Suppliers = require('../models/suppliers'); // Importez le modèle Supplier
 
 
@@ -9,9 +9,9 @@ module.exports = {
             const suppliers = await Suppliers.findAll({
                 attributes: ['supplier_id', 'category_id', 'supplier_name', 'contact_email', 'contact_phone' ]
               });
-            return res.status(200).json({'message': "Tous les fournisseurs ont été récupérés avec succès", 'donnees': suppliers});
+            return res.status(200).json({'results': suppliers});
         } catch (error) {
-            return res.status(500).json({ 'message': 'Impossible de récupérer les données' });
+            return res.status(401).json({ 'message': 'Impossible de récupérer les données' });
         }
     },
 
@@ -30,7 +30,7 @@ module.exports = {
             return res.status(201).json({'message': 'Fournisseur ajouté avec succès', 'newSupplier': newSupplier});
         } catch (error) {
            console.error(error);
-            return res.status(500).json({ 'message': 'Erreur lors de ajout de nouveau fournisseur' });
+            return res.status(401).json({ 'message': 'Erreur lors de ajout de nouveau fournisseur' });
         }
     },
 
@@ -50,7 +50,7 @@ module.exports = {
             await supplier.destroy();
             return res.status(200).json({ 'message': 'Fournisseur supprimé avec succès' });
         } catch (error) {
-            return res.status(500).json({ 'message': 'Cannot delete supplier', 'error': error });
+            return res.status(401).json({ 'message': 'Cannot delete supplier', 'error': error });
         }
     }
 
@@ -74,7 +74,7 @@ module.exports = {
     
     //         res.status(200).json(supplier);
     //     } catch (error) {
-    //         res.status(500).json({ error: 'Cannot update supplier' });
+    //         res.status(401).json({ error: 'Cannot update supplier' });
     //     }
     // }
 }

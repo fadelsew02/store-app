@@ -1,6 +1,6 @@
-const express = require('express');
-const Finances = require('../models/finance'); // Importez le modèle Supplier
-const sequelize = require('../models/index'); // Assurez-vous d'importer correctement votre instance Sequelize
+// const express = require('express');
+// const Finances = require('../models/finance'); 
+const sequelize = require('../models/index'); 
 const { QueryTypes } = require('sequelize');
 
 
@@ -20,9 +20,9 @@ module.exports = {
 
             const results = await sequelize.query(sqlQuery, { type: QueryTypes.SELECT });
             console.log(results.capital)
-            return res.status(200).json({'message': "La finance du magasin a été récupéré avec succès", 'donnees': results[0]});
+            return res.status(200).json({'results': results[0]});
         } catch (error) {
-            return res.status(500).json({ 'message': error });
+            return res.status(401).json({ 'message': error });
         }
     }
 

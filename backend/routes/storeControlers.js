@@ -1,4 +1,4 @@
-const express = require('express');
+// const express = require('express');
 const Stores = require('../models/stores'); 
 
 
@@ -15,9 +15,9 @@ module.exports = {
                     manager_id: managerId
                 }
             });
-            return res.status(200).json({'message': "Le magasin a été retrouvé", 'store_id': storeFound});
+            return res.status(200).json({'results': storeFound});
         } catch (error) {
-            return res.status(500).json({ 'message': error });
+            return res.status(401).json({ 'message': error });
         }
     }
 }

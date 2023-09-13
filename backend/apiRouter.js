@@ -17,7 +17,7 @@ exports.router = (function() {
   // Users routes
   apiRouter.route('/users/register/').post(userControlers.register);
   apiRouter.route('/users/login/').post(userControlers.login);
-  apiRouter.route('/users/me/').get(userControlers.getUserProfile);
+  apiRouter.route('/users/me/:token').get(userControlers.getUserProfile);
   apiRouter.route('/users/me/').put(userControlers.updateUserProfile);
 
   //Suppliers routes
@@ -39,6 +39,7 @@ exports.router = (function() {
 
   apiRouter.route('/stocks/display/:id_store').get(stocksControlers.display);
   apiRouter.route('/stocks/edit/:idToEdit').put(stocksControlers.updatePriceQuantity);
+  apiRouter.route('/stocks/panier').post(stocksControlers.panier);
   
   
   apiRouter.route('/customers/display/:id_store').get(customerControlers.display);

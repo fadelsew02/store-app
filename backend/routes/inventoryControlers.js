@@ -1,6 +1,6 @@
-const express = require('express');
+// const express = require('express');
 const InventoryMovements = require('../models/inventoryMovements'); 
-const sequelize = require('../models/index'); // Assurez-vous d'importer correctement votre instance Sequelize
+const sequelize = require('../models/index'); 
 const { QueryTypes } = require('sequelize');
 
 
@@ -28,9 +28,9 @@ module.exports = {
                 for (const value of item_chosenId) {
                     await insertDataIntoTable(storeId, value, quantity);
                 }
-            return res.status(200).json({'message': "La commande a été passée avec succès."});
+            return res.status(200).json({'results': ''});
         } catch (error) {
-            return res.status(500).json({ 'message': error });
+            return res.status(401).json({ 'message': error });
         }
     },
     history: async (req, res) => {
@@ -61,9 +61,9 @@ module.exports = {
             `;
 
             const results = await sequelize.query(sqlQuery, { type: QueryTypes.SELECT });
-            return res.status(200).json({'message': "L'historique a bien été récupéré", 'donnees': results});
+            return res.status(200).json({'results': results});
         } catch (error) {
-            return res.status(500).json({ 'message': error });
+            return res.status(401).json({ 'message': error });
         }
     }
 }

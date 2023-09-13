@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BiSort } from "react-icons/bi";
 import { Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Pagination, Modal, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import axios from 'axios';
+import { useAuth } from '../../auth/auth';
+import { getEntity } from '../../../utils/requests';
 import SearchComponent from '../search/search';
 
 import './historique.scss';
@@ -17,17 +18,20 @@ const Historique = () => {
   const [ordersDetails, setOrdersDetails] = useState([]);
   const [open, setOpen] = useState(false);
 
+  const auth = useAuth();
+
   useEffect(() => {
     async function fetchData() {
-      await axios.get(`http://localhost:5000/api/customers/display/2`)
-        .then(response => {
-          if (response.data.message === "Tout l'historique des clients du magasin a été récupéré avec succès") {
-            setCustom(response.data.donnees);
-          } else {
-            setError('Erreur lors de la récupération de l\'historique');
-          }
-        })
-        .catch(err => console.error(err));
+      try {
+        const response = await getEntity(`customers/display/${auth.idStore['store_id']}`);
+        if (response.data.success === true) {
+          setCustom(response.data.results);
+        } else {
+          setError('Erreur lors de la récupération de l\'historique');
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     fetchData();
@@ -38,52 +42,46 @@ const Historique = () => {
       setCustomers(custom);
     }
   }, [custom]);
-  
-   const handlePageChange = (event, newPage) => {
+
+  const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
-  
 
-  
   const handleOrderDetails = async (id) => {
-     setOpen(true);
-     console.log(id)
-    await axios.get(`http://localhost:5000/api/ordersDetails/display/${id}`) // ${id}
-      .then(response => {
-        if (response.data.message === "Les détails de cette commande ont été récupéré avec succès") {
-          setOrdersDetails(response.data.donnees);
-          console.log(response.data.donnees)
-        } else {
-          setError('Erreur lors de la récupération des détails');
-        }
-      })
-      .catch(err => console.error(err));
-  };
-  
-  
-      const handleClose = ()=>{
-          setOpen(false);
-      }
-  
-  
-        const style = {
-          position: 'absolute',
-          top:'50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 'auto',
-          bgcolor: 'background.paper',
-          border: '1px solid #FFF',
-          boxShadow: 24,
-          p: 5,
-      };
+    setOpen(true);
 
- 
+    try {
+      const response = await getEntity(`ordersDetails/display/${id}`);
+      if (response.data.success === true) {
+        setOrdersDetails(response.data.results);
+      } else {
+        setError('Erreur lors de la récupération des détails');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'auto',
+    bgcolor: 'background.paper',
+    border: '1px solid #FFF',
+    boxShadow: 24,
+    p: 5,
+  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = customers.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   const renderOrderDetails = ordersDetails.map((element, index) => (
     <TableRow key={index}>
       <TableCell sx={{ textAlign: 'center', fontSize: '15px' }}>{index + 1}</TableCell>
@@ -92,22 +90,17 @@ const Historique = () => {
       <TableCell sx={{ textAlign: 'center', fontSize: '12px' }}>{element.price_per_item}</TableCell>
     </TableRow>
   ));
-  
-  
+
   const renderCustomers = currentItems.map((element, index) => (
     <TableRow key={index}>
-    
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{index + 1}</TableCell>
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.nom}</TableCell>
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.prenom}</TableCell>
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.email}</TableCell>
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.order_date.split('T')[0]}</TableCell>
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.total_amount} £</TableCell>
-          <TableCell sx={{ textAlign: 'center', fontSize: '17px' }} onClick={() => handleOrderDetails(element.order_id)} ><AddIcon />       </TableCell>
-      </TableRow>
-    
-));
-
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{index + 1}</TableCell>
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.nom}</TableCell>
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.prenom}</TableCell>
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.email}</TableCell>
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.order_date.split('T')[0]}</TableCell>
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }} onClick={() => handleOrderDetails(element.order_id)} ><AddIcon /> </TableCell>
+    </TableRow>
+  ));
 
   function searchType(typefiltre) {
     setType(typefiltre);
@@ -121,8 +114,6 @@ const Historique = () => {
   } else if(type === '3') {
     elemToSort = 'total_amount';
   }
-  
-
 
   return (
     <div className='fake-body'>
@@ -135,7 +126,7 @@ const Historique = () => {
                 <div className="row">
                   <div className="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
                     <Typography variant="h5" ml="2"> Historique des Clients</Typography>
-                    <BiSort style={{fontSize: '24px', float: 'right', marginLeft: '80%' }} className = 'sortIcone'/>
+                    <BiSort style={{ fontSize: '24px', float: 'right', marginLeft: '80%' }} className='sortIcone' />
                   </div>
                 </div>
               </div>
@@ -166,16 +157,16 @@ const Historique = () => {
           </div>
         </div>
       </div>
-      
+
       <Modal
-            open={open}
-            onClose={handleClose}
-            arial-labelledby = "parent-modal-title"
-            aria-describedby = "parent-modal-description"
-          >
-            <Box sx={style} >
-                 <h3 id="parent-modal-title" style={{fontSize: '1.3rem', textAlign: 'center', fontWeight: 'bolder', m:5}}> Plus d'informations </h3> <br/>
-                <TableContainer component={Paper}>
+        open={open}
+        onClose={handleClose}
+        arial-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box sx={style} >
+          <h3 id="parent-modal-title" style={{ fontSize: '1.3rem', textAlign: 'center', fontWeight: 'bolder', m: 5 }}> Plus d'informations </h3> <br />
+          <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -189,15 +180,14 @@ const Historique = () => {
                 {renderOrderDetails}
               </TableBody>
             </Table>
-          </TableContainer> <br/>
+          </TableContainer> <br />
           <div>
-                    <Button variant="text" color="secondary" onClick={handleClose} style={{float: 'right'}}> Cancel</Button>
-                </div>
-            </Box>
-          </Modal>
+            <Button variant="text" color="secondary" onClick={handleClose} style={{ float: 'right' }}> Cancel</Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 }
 
 export default Historique;
-

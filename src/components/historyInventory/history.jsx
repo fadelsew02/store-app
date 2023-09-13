@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Button } from '@mui/material';
 import { Pagination, Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // Import du composant ExpandMoreIcon
-import axios from 'axios';
+
+import { getEntity } from '../../utils/requests'; 
+import { useAuth } from '../auth/auth';
 
 import './history.scss';
 
@@ -12,6 +14,7 @@ const History = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(3);
     const [expanded, setExpanded] = useState(false);
+    const auth = useAuth();
 
     const handleChange = (tableau) => (event, isExpanded) => {
         setExpanded(isExpanded ? tableau : false);
@@ -20,16 +23,18 @@ const History = (props) => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://localhost:5000/api/inventory/history/${props.id_store}`);
-                if (response.data.message === "L'historique a bien été récupéré") {
-                    setHistory(response.data.donnees);
+                // Utilisez la fonction getEntity pour effectuer la requête
+                const response = await getEntity(`inventory/history/${auth.idStore['store_id']}`);
+                console.log(props.skip)
+                if (response.data.success === true) {
+                    setHistory(response.data.results);
                 }
             } catch (error) {
                 console.error(error);
             }
         }
         fetchData();
-    }, []);
+    }, [props.skip]);
 
     const handlePageChange = (event, newPage) => {
         setCurrentPage(newPage);

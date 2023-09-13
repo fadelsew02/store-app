@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Select,
   MenuItem,
@@ -8,11 +9,11 @@ import {
   OutlinedInput,
   Button,
 } from "@mui/material";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { useAuth } from "../../auth/auth";
 
 import History from "../../historyInventory/history";
+
+import { getEntity, postEntity } from "../../../utils/requests";
 
 import "./ravitailler.scss";
 
@@ -23,12 +24,12 @@ const Ravitaillement = () => {
   const [items, setItems] = useState([]);
   const [errorSuppliers, setErrorSuppliers] = useState("Aucun");
   const [errorItems, setErrorItems] = useState("Aucun");
-  const [itemChoose, setitemChoose] = useState([]);
+  const [itemChoose, setItemChoose] = useState([]);
   const [quantity, setQuantity] = useState(10);
   const [msg, setMsg] = useState("");
-  const [itemId, setItemId] = useState("");
-  const [storeId, setStoreId] = useState(null);
-
+  const [itemIds, setItemIds] = useState([]);
+  const [skip, setSkip] = useState(false);
+ 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -41,45 +42,45 @@ const Ravitaillement = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/suppliers/display")
-      .then((response) => {
-        if (
-          response.data.message ===
-          "Tous les fournisseurs ont été récupérés avec succès"
-        ) {
-          setSuppliers(response.data.donnees);
+    async function fetchData() {
+      try {
+        const response = await getEntity("suppliers/display");
+        if (response.data.success) {
+          setSuppliers(response.data.results);
         } else {
           setErrorSuppliers("Erreur lors de la récupération des fournisseurs");
         }
-      })
-      .catch((err) => console.error(err));
-  });
-
-  const handleSupplier = async (e) => {
-    for (let i = 0; i < suppliers.length; i++) {
-      if (e.target.value === suppliers[i].supplier_name) {
-        const cat = suppliers[i].category_id;
-        await axios
-          .get(`http://localhost:5000/api/items/display/${cat}`)
-          .then((response) => {
-            if (
-              response.data.message ===
-              "Tous les items de la catégorie ont été récupérés avec succès"
-            ) {
-              setItems(response.data.donnees);
-            } else {
-              setErrorItems(
-                "Impossible de récupérer les articles correspondants à ce fournisseur"
-              );
-            }
-          })
-          .catch((err) => console.error(err));
-        break;
+      } catch (error) {
+        console.error("Erreur lors de la récupération des fournisseurs :", error);
+        setErrorSuppliers("Erreur lors de la récupération des fournisseurs");
       }
     }
 
-    // console.log(auth)
+    fetchData();
+  }, []);
+
+  const handleSupplier = async (e) => {
+    for (let i = 0; i < suppliers.length; i++) {
+       if (e.target.value === suppliers[i].supplier_name) {
+        const cat = suppliers[i].category_id;
+        try {
+          const response = await getEntity(`items/display/${cat}`);
+          if (response.data.success === true) {
+            setItems(response.data.results);
+          } else {
+            setErrorItems(
+              "Impossible de récupérer les articles correspondants à ce fournisseur"
+            );
+          }
+        } catch (error) {
+          console.error("Erreur lors de la récupération des articles :", error);
+          setErrorItems(
+            "Impossible de récupérer les articles correspondants à ce fournisseur"
+          );
+        }
+        break;
+      }
+    }
   };
 
   const handleQuantity = (e) => {
@@ -87,74 +88,66 @@ const Ravitaillement = () => {
   };
 
   async function fetchDataId(itemChosenName) {
-    await axios
-      .get(`http://localhost:5000/api/items/getAllId/${itemChosenName}`)
-      .then((reponse) => {
-        if (
-          (reponse.data.message = "L'id de l'item a été retrouvé avec succès")
-        ) {
-          setItemId((itemId) => [...itemId, reponse.data.itemId]);
-        }
-      })
-      .catch((err) => console.error(err));
+    try {
+      const response = await getEntity(`items/getAllId/${itemChosenName}`);
+      if (response.data.success === true) {
+        setItemIds((itemIds) => [...itemIds, response.data.results]);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'ID de l'article :", error);
+    }
   }
 
   async function postDataInventory(storeIdentifiant) {
-    await axios
-      .post("http://localhost:5000/api/inventory/commander", {
+    try {
+      const response = await postEntity("inventory/commander", {
         storeId: storeIdentifiant,
-        item_chosenId: itemId,
+        item_chosenId: itemIds,
         quantity: quantity,
-      })
-      .then((response) => {
-        if (response.data.message === "La commande a été passée avec succès.") {
-          setMsg("Votre commande a été passée avec succès");
-          setitemChoose([]);
-          setQuantity(10);
-        } else if (response.data.message === "Choix articles invalide ") {
-          setMsg("Vos choix concernant les articles ne sont valides");
-        } else {
-          setMsg("Une erreur est survenue lors de la commande");
-        }
-      })
-      .catch((err) => console.error(err));
+      });
+      if (response.data.success === true) {
+        setMsg("Votre commande a été passée avec succès");
+        setItemChoose([]);
+        setQuantity(10);
+        setSkip(true);
+      } else {
+            setMsg("Une erreur est survenue lors de la commande");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la commande :", error);
+      setMsg("Une erreur est survenue lors de la commande");
+    }
   }
 
   const handleInventory = async () => {
-    const loggedId = auth.loggedId;
 
-    await axios
-      .get(`http://localhost:5000/api/stores/getStoreId/2`) //${loggedId}
-      .then((response) => {
-        if (response.data.message === "Le magasin a été retrouvé") {
-          const promises = itemChoose.map((itemChosenName) =>
-            fetchDataId(itemChosenName)
-          );
-          // Check if all IDs are fetched
-          if (itemId.length === itemChoose.length) {
-            const storeID = response.data.store_id;
-            auth.getIdStore(storeID)
-            setStoreId(storeID);
-            postDataInventory(storeID);
-          } else {
-            // IDs are not fetched for all items yet
-            console.log("Item IDs not fetched for all items yet.");
-            alert("Réessayez !");
-          }
+    try {
+        const promises = itemChoose.map((itemChosenName) =>
+          fetchDataId(itemChosenName)
+        );
+        // Vérifiez si tous les IDs ont été récupérés
+        if (itemIds.length === itemChoose.length) {
+          postDataInventory(auth.idStore['store_id']);
+        } else {
+          // Les IDs ne sont pas encore récupérés pour tous les articles
+          console.log("Les IDs des articles n'ont pas encore été récupérés.");
+          alert("Réessayez !");
         }
-      })
-      .catch((err) => console.error(err));
+    } catch (error) {
+      console.error("Erreur lors de la récupération des ID des items choisis :", error);
+    }
   };
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setitemChoose(
-      // On autofill we get a stringified value.
+    setItemChoose(
+      // En cas d'autocomplétion, nous obtenons une valeur sous forme de chaîne.
       typeof value === "string" ? value.split(",") : value
     );
   };
+
   return (
     <div
       className="main-body"
@@ -165,24 +158,24 @@ const Ravitaillement = () => {
         alignItems: "center",
         height: "100vh",
         width: "100%",
+        overflow: "hidden"
       }}
     >
       <div className="fake-body">
         <div className="main-container">
           <form>
             <div> {msg !== "" ? <span> {msg} </span> : <span></span>} </div>
-            <div>
+            <div >
               <FormControl className="alias-input">
                 <InputLabel> Quel fournisseur ? </InputLabel>
                 <Select
-                  // value={supplier}
                   label="Fournisseur"
                   onChange={(e) => handleSupplier(e)}
                 >
                   {suppliers ? (
-                    suppliers.map((suplier, index) => (
-                      <MenuItem value={suplier.supplier_name}>
-                        {suplier.supplier_name}
+                    suppliers.map((supplier, index) => (
+                      <MenuItem key={index} value={supplier.supplier_name}>
+                        {supplier.supplier_name}
                       </MenuItem>
                     ))
                   ) : (
@@ -218,7 +211,9 @@ const Ravitaillement = () => {
                       </MenuItem>
                     ))
                   ) : (
-                    <p> errorItems || "Aucun fournisseur sélectionné" </p>
+                    <MenuItem value="">
+                      <em> {errorItems} </em>
+                    </MenuItem>
                   )}
                 </Select>
               </FormControl>
@@ -255,7 +250,7 @@ const Ravitaillement = () => {
         </div>
       </div>
       <div className="history-div">
-        <History id_store={storeId} />
+        <History skip = {skip}/>
       </div>
     </div>
   );

@@ -1,15 +1,4 @@
 
-// @function myFunction($value){
-//     .icone{
-//         padding: $value / 2;
-//     }
-//     
-//     .title{
-//         font-size: $value;
-//     }
-// }
-
-
 .main-financeDiv{
     width: 90%;
     height: 30vh;
@@ -26,12 +15,12 @@
     }
     
     .title{
-        font-size: 30px;
-        margin-right: 20px;
+        font-size: 20px;
+        margin-right: 15px;
     }
     
     .finance-part{
-            font-size: 45px;
+            font-size: 27px;
         }
         
         // @include myFunction(40px);
@@ -49,16 +38,14 @@
     }
     
     .title{
-        font-size: 30px;
-        margin-right: 20px;
+        font-size: 20px;
+        margin-right: 15px;
     }
     
     .finance-part{
-            font-size: 45px;
+            font-size: 27px;
         }
-        
         // @include myFunction(40px);
-
     }
 
 
@@ -72,12 +59,12 @@
         }
         
         .title{
-            font-size: 30px;
-            margin-right: 20px;
+            font-size: 20px;
+            margin-right: 15px;
         }
         
         .finance-part{
-            font-size: 45px;
+            font-size: 27px;
         }
         
         // @include myFunction(40px);

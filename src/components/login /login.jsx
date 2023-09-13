@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
-import axios from 'axios';
+// import axios from 'axios';
+import {  postEntity, getEntity } from '../../utils/requests'; 
 
 import loginBg from '../../assets/images/bg-login.jpg'
 import './login.scss';
@@ -18,6 +19,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [checked, setChecked] = useState(true);
+    const [store_Id, setStore_Id] = useState(null)
 
     const auth = useAuth();
 
@@ -26,37 +28,43 @@ const Login = () => {
         if(email !== "" && password !== ""){
   
             try {
-                await axios.post('http://localhost:5000/api/users/login', { 
-                        email: email, 
-                        password: password
-                })
-                .then( response =>{
-                    if(response.data.message === "Manager inscrit" || response.data.message === "Client inscrit"){
-                        setEmail("");
-                        setPassword("");
-              
-                        setTimeout(() => {
-                            if(response.data.role === 'owner'){
-                                auth.loginOkay(0);
-                                navigate("/owners", {replace: true}); 
-                            } else if( response.data.role === 'manager'){
-                                auth.loginOkay(response.data.managerId);
-                                navigate("/manager", {replace: true}) 
-                            } else if(response.data.role === 'customer'){
-                                auth.loginOkay(response.data.customerId);
-                                navigate("/customers", {replace: true}) 
-                            } else {
-                                navigate("*") 
+                const response = await postEntity('users/login', {email: email, password: password})
+                if(response.data.success === true){
+                    setEmail("");
+                    setPassword("");
+                    
+                    setTimeout(async () => {
+                        if(response.data.role === 'owner'){
+                            auth.loginOkay(0);
+                            navigate("/owners", {replace: true}); 
+                        } else if( response.data.role === 'manager'){
+                            auth.loginOkay(response.data.results);
+                            auth.getToken(response.data.token)
+                            try{
+                                const reponse = await getEntity(`stores/getStoreId/${response.data.results}`);
+                                if(reponse.data.success === true){
+                                    const storeID = reponse.data.results;
+                                    setStore_Id(reponse.data.results)
+                                    console.log(storeID)
+                                    auth.getIdStore(storeID);
+                                } else {
+                                    setError('Erreur lors de la récupération du storeID')
+                                }
+                            } catch (error) {
+                                console.error(error);
                             }
-                        }, 1500);
-                    } else if(response.data.message === "Paramètres manquants"){
-                        setError("Paramètres manquants");
-                    } else if(response.data.message === "Password incorrect"){
-                        setError("Password incorrect");
-                    } else if(response.data.message === "User non existant dans la base de données") {
-                        setError("User inexistant ");
-                    } 
-                })
+                            navigate("/manager", {replace: true}) 
+                        } else if(response.data.role === 'customer'){
+                            auth.loginOkay(response.data.results);
+                            auth.getToken(response.data.token)
+                            navigate("/customers", {replace: true}) 
+                        } else {
+                            navigate("*") 
+                        }
+                    }, 1500);
+                } else {
+                    setError(response.data.message)
+                }
             } catch (error) {
                 console.error('Erreur de connexion', error);
             }

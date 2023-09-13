@@ -1,6 +1,6 @@
 // const express = require('express');
-const Customers = require('../models/customers');
-const sequelize = require('../models/index'); // Assurez-vous d'importer correctement votre instance Sequelize
+// const Customers = require('../models/customers');
+const sequelize = require('../models/index'); 
 const { QueryTypes } = require('sequelize');
 
 
@@ -28,9 +28,9 @@ module.exports = {
             `;
 
             const results = await sequelize.query(sqlQuery, { type: QueryTypes.SELECT });
-            return res.status(200).json({'message': "Tout l'historique des clients du magasin a été récupéré avec succès", 'donnees': results});
+            return res.status(200).json({'results': results});
         } catch (error) {
-            return res.status(500).json({ 'message': error });
+            return res.status(401).json({ 'message': error });
         }
     }
     
@@ -55,9 +55,9 @@ module.exports = {
     //                 }
     //                 articleFound.update(updates);
     //         } 
-    //          return res.status(201).json({'message': 'Les informations ont été update avec succès', newArticle: articleFound});
+    //          return res.status(201).json({ newArticle: articleFound});
     //     } catch (error) {
-    //         return res.status(500).json({'message': error})
+    //         return res.status(401).json({'message': error})
     //     }
     // }
 }
