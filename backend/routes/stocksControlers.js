@@ -30,18 +30,24 @@ module.exports = {
                 return res.status(200).json({'results': results});
             } else {
                  const sqlQuery = `
-                    SELECT DISTINCT
-                        s.item_id, 
-                        s.quantity, 
-                        i.item_name, 
-                        i.price,
-                        i.url_photo
-                    FROM 
-                        "Stocks" AS s 
-                    INNER JOIN 
-                        "Items" AS i 
-                    ON 
-                        s.item_id = i.item_id;
+                     SELECT DISTINCT
+                            s.item_id,
+                            s.store_id, 
+                            s.quantity,
+                            i.item_name, 
+                            i.price,
+                            i.url_photo,
+                            st.store_name  
+                        FROM 
+                            "Stocks" AS s 
+                        INNER JOIN 
+                            "Items" AS i 
+                        ON 
+                            s.item_id = i.item_id
+                        LEFT JOIN  
+                            "Stores" AS st
+                        ON 
+                            s.store_id = st.store_id ;
                 `;
                 const results = await sequelize.query(sqlQuery, { type: QueryTypes.SELECT });
                 return res.status(200).json({'results': results});
@@ -87,16 +93,22 @@ module.exports = {
             await Promise.all(arrayOfIds.map(async (id) => {
                 const sqlQuery = `
                     SELECT DISTINCT
-                        s.item_id, 
+                        s.item_id,
+                        s.store_id, 
                         i.item_name, 
                         i.price,
-                        i.url_photo
+                        i.url_photo,
+                        st.store_name  
                     FROM 
                         "Stocks" AS s 
                     INNER JOIN 
                         "Items" AS i 
                     ON 
                         s.item_id = i.item_id
+                    LEFT JOIN  
+                        "Stores" AS st
+                    ON 
+                        s.store_id = st.store_id 
                     WHERE
                         s.item_id = ${id};
                 `;

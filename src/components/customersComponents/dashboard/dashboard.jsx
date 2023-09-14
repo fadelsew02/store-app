@@ -86,6 +86,9 @@ const Dashboard = () => {
             <Typography variant="body2">
               Stock restant: {element.quantity}
             </Typography>
+            <Typography variant="body2">
+              Magasin: {element.store_name}
+            </Typography>
           </CardContent>
           <CardActions sx={{ float: 'right' }}>
             <Button size="small" color="primary" variant="text" onClick={() => handleAdd(element.item_id)}>Ajouter</Button>
