@@ -6,6 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
 import { postEntity } from '../../../utils/requests';
 import { useAuth } from '../../auth/auth'
 
@@ -19,6 +21,9 @@ const Panier = () => {
   const [error, setError] = useState('');
   const [prix, setPrix] = useState(null);
   const [montant, setMontant] = useState(null);
+  const [objet, setObjet] = useState({});
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [arrayOfObject, setArrayOfObject] = useState([])
   const auth = useAuth();
 
   useEffect(() => {
@@ -46,6 +51,14 @@ const Panier = () => {
   };
   
     const [open, setOpen] = React.useState(false);
+    
+    const handleStoreId = (idOfItem) => {
+        basket.forEach((element)=>{
+            if(element[0].item_id === idOfItem){
+                return element[0].store_id;
+            }
+        })
+    }
 
       const handleClickOpen = () => {
         const compteur = auth.itemsBought.reduce((acc, valeur) => {
@@ -64,11 +77,12 @@ const Panier = () => {
           return acc; // N'oubliez pas de renvoyer l'accumulateur à chaque itération
         }, {});
         
-        const objetFusionne = {...compteur, ...newObject};
-        
-        
         let total = 0
         for (const item_id in compteur) {
+            const store_id = handleStoreId(item_id)
+            const objetFusionne = {...compteur, ...newObject};
+            objectFusionne
+            setArrayOfObject( (prevObjectFusionne) => [...arrayOfObject, objetFusionne]);
           if (compteur.hasOwnProperty(item_id)) {
             const occurrences = compteur[item_id];
             const price = newObject[item_id];
@@ -105,6 +119,36 @@ const Panier = () => {
   
   const handleConfirm = ()=>{
       //je dois récupérer chaque article ainsi que le store dans lequel il est, puis ajouter à la caisse du store le montant d'articles achetés
+      const montantsMagasins = {};
+      arrayOfObject.forEach((element)=>{
+          const { store_id, quantity, price } = item;
+          const montantAchat = quantity*price;
+          if(!montantsMagasins[store_id]){
+              montantsMagasins[store_id] = 0;
+          }
+          montantsMagasins[store_id] += montantAchat;
+      })
+            const dataOnSend = {
+              customer_id: auth.loggedId,
+              montantsMagasins: montantsMagasins,
+              total_amount: montant,
+              arrayOfObject: arrayOfObject
+          }
+      
+        try {
+            const response = await postEntity('stocks/payment', dataOnSend);
+            if (response.data.success === true) {
+              // La transaction a réussi, affichez la boîte de dialogue de succès.
+              setPaymentSuccess(true);
+              console.log('Paiement réussi !');
+            } else {
+              setError('Erreur lors du paiement');
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Erreur lors du paiement');
+        }
+
   }
 
 
@@ -167,6 +211,28 @@ const Panier = () => {
           <Button onClick={handleConfirm}>Confirmer</Button>
         </DialogActions>
       </Dialog>
+      <Dialog
+          open={paymentSuccess}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={() => setPaymentSuccess(false)}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"Paiement réussi"}</DialogTitle>
+          <DialogContent>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <CheckCircleOutlineIcon style={{ fontSize: 48, color: 'green' }} />
+              <DialogContentText id="alert-dialog-slide-description" style={{ marginLeft: '16px' }}>
+                Votre paiement a été traité avec succès.
+              </DialogContentText>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setPaymentSuccess(false)}>Fermer</Button>
+          </DialogActions>
+    </Dialog>
+
+
     </div>
   );
 }

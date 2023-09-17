@@ -9,6 +9,7 @@ const stocksControlers = require('./routes/stocksControlers');
 const financeControlers = require('./routes/financeControlers');
 const customerControlers = require('./routes/customerControlers');
 const ordersDetailsControlers = require('./routes/ordersDetailsControlers');
+const orderControlers = require('./routes/orderControlers');
 
 // Router
 exports.router = (function() {
@@ -40,12 +41,15 @@ exports.router = (function() {
   apiRouter.route('/stocks/display/:id_store').get(stocksControlers.display);
   apiRouter.route('/stocks/edit/:idToEdit').put(stocksControlers.updatePriceQuantity);
   apiRouter.route('/stocks/panier').post(stocksControlers.panier);
+  apiRouter.route('/stocks/payment').post(stocksControlers.payment);
   
   
   apiRouter.route('/customers/display/:id_store').get(customerControlers.display);
   
   
   apiRouter.route('/finances/recuperer/:id_store').get(financeControlers.recuperer);
+  
+  apiRouter.route('/orders/buy').post(orderControlers.buy)
   
    apiRouter.route('/ordersDetails/display/:order_id').get(ordersDetailsControlers.display);
 

@@ -1,14 +1,15 @@
+
+
+
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
-// import axios from 'axios';
 import {  postEntity, getEntity } from '../../utils/requests'; 
 
 import loginBg from '../../assets/images/bg-login.jpg'
 import './login.scss';
 
-// import Manager from '../manager/manager';
 import { useAuth } from '../auth/auth';
 
 

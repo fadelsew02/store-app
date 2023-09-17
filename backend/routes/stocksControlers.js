@@ -1,8 +1,49 @@
 // const express = require('express');
 const Stocks = require('../models/stocks');
+const Orders = require('../models/orders');
+const OrderDetails = require('../models/orderDetails')
+const Finances = require('../models/finance');
 const sequelize = require('../models/index'); 
 const { QueryTypes } = require('sequelize');
 
+
+async function insertDataIntoTable(montant, customer_id, total_amount, storeId) {
+    const orderDate = new Date(); 
+    try {
+         // Mettez à jour le champ 'revenus' de l'entité 'Finances' pour le magasin spécifié
+        await Finances.update(
+             { revenus: sequelize.literal(`revenus + ${montant}`) },
+             { where: { store_id: storeId } }
+        );
+
+        const newOrder = await Orders.create({
+            store_id: storeId,
+            customer_id: customer_id,
+            order_date: orderDate,
+            total_amount: total_amount
+        });
+        return newOrder;
+    } catch (error) {
+        return false;
+        console.error(error)
+    }
+}
+
+
+async function insertDataIntoOrderDetails(quantity, item_id, price_per_item, order_id) {
+    try {
+        await OrderDetails.create({
+            item_id: item_id,
+            quantity: quantity,
+            price_per_item: price_per_item,
+            order_id: order_id
+        });
+
+    } catch (error) {
+        return false;
+        console.error(error)
+    }
+}
 
 module.exports = {
     // Afficher tous les fournisseurs
@@ -120,7 +161,33 @@ module.exports = {
         } catch (error) {
             return res.status(401).json({ 'message': error });
         }
+    },
+    
+    payment: async (req, res) => {
+        const { customer_id, montantsMagasins, total_amount, arrayOfObject } = req.body;
+        const arrayOfIdsOrder = [];
+
+        try {
+          await Promise.all(arrayOfObject.map( async (element)=>{
+            const result = await insertDataIntoTable(montantsMagasins[element.store_id], customer_id, total_amount, element.store_id);
+            arrayOfIdsOrder.push(result.order_id);
+          }));
+          
+          try{
+                let index = 0;
+                 await Promise.all( arrayOfObject.map(async (element) => {
+                      await insertDataIntoOrderDetails(element.quantity, element.item_id, element.price, arrayOfIdsOrder[index]);
+                      index++;
+                  }));
+          } catch (err) {
+              return res.status(401).json({'messsage': err})
+          }
+            return res.status(201).json({ 'results': arrayOfIdsOrder });
+        } catch (error) {
+            return res.status(401).json({ 'message': error });
+        }
     }
 
 }
+
 

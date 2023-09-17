@@ -19,7 +19,7 @@ const insertInventory = async () => {
             { store_id: 1, item_id: 1, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 100 },
             { store_id: 2, item_id: 2, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 130 },
             { store_id: 6, item_id: 1, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 90 },
-            { store_id: 4, item_id: 2, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 10 },
+            { store_id: 4, item_id: 2, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 0 },
             { store_id: 7, item_id: 1, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 70 },
             { store_id: 5, item_id: 2, movement_date: randomDate(new Date(2023, 0, 1), new Date()), quantity: 30 },
 

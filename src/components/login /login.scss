@@ -1,15 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@1,9..40,900&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@1,9..40,900&display=swap');
+
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,300;1,500&display=swap');
+
 
 $colorh2: #607d8b;
 $letterSpacing: 1px;
-
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'DM Sans', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
 
 section{
     position: relative;
@@ -47,7 +42,7 @@ section{
             border-radius: 10px;
             position: relative;
             z-index: 2;                             
-                                   
+            
             h2{    
                 color:$colorh2;
                 font-weight:400;
