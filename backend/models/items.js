@@ -3,8 +3,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Categories = require('./categorie');
-const Stores = require('./stores');
+// const Categories = require('./categorie');
+// const Stores = require('./stores');
 
 const Items = sequelize.define('Items', {
     item_id: {

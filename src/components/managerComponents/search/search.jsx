@@ -5,72 +5,76 @@ import { AppBar, Box, InputBase, MenuItem, Select, FormControl, Toolbar, InputLa
 import SearchIcon from '@mui/icons-material/Search';
 
 
- const Search = styled('div')(({ theme }) => ({
-          position: 'relative',
-          borderRadius: theme.shape.borderRadius,
-          backgroundColor: alpha(theme.palette.common.white, 0.5),
-          '&:hover': {
-            backgroundColor: alpha(theme.palette.common.white, 0.15),
-          },
-          marginRight: theme.spacing(6),
-          marginLeft: 0,
-          width: '100%',
-          [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(3),
-            width: 'auto',
-          },
-        }));
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.5),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+  },
+  marginRight: theme.spacing(6),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
         
-    
-    const SearchIconWrapper = styled('div')(({ theme }) => ({
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }));
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
 
-    const StyledInputBase = styled(InputBase)(({ theme }) => ({
-      color: 'inherit',
-      '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-          width: '20ch',
-        },
-      },
-    }));
-    
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
     
 const SearchComponent = ( {list, setList, filterField = item => item, ...props} ) => {
-    const [selection, setSelection] = useState('1');
-    const [value, setValue] = useState('');
+
+  const [selection, setSelection] = useState('1');
+  const [value, setValue] = useState('');
     
-    const handleCategorieSearch = (e)=>{
-        setSelection(e.target.value)
-        props.rechercheType(e.target.value)
+  const handleCategorieSearch = (e)=>{
+    if(e) {
+      setSelection(e.target.value)
+      props.rechercheType(e.target.value)
+    } else {
+      setSelection('1')
+      props.rechercheType('1')
     }
+
+  }
     
-    const handleValueChange = (e)=>{
-        setValue(e.target.value)
+  const handleValueChange = (e)=>{
+    setValue(e.target.value)
+  }
+    
+  useEffect(()=>{
+    if(value){
+      setList(filterList())
+    } else {
+      setList(list)
     }
-    
-    useEffect(()=>{
-        if(value){
-            setList(filterList())
-        } else {
-            setList(list)
-        }
-    }, [value])
+  }, [value]);
       
-      
-      const filterList = ()=>{
-          return list.filter(item => filterField(item).toLowerCase().includes(value.toLocaleLowerCase()))
-      }
+  const filterList = ()=>{
+    return list.filter(item => filterField(item).toLowerCase().includes(value.toLocaleLowerCase()))
+  }
       
   return (
     <Box sx={{ flexGrow: 1, width: '100%' }}>
@@ -109,6 +113,7 @@ const SearchComponent = ( {list, setList, filterField = item => item, ...props} 
 }
 
 export default SearchComponent
+
 
 
 

@@ -1,9 +1,8 @@
 
-// stockMovements.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Stores = require('./stores');
+// const Stores = require('./stores');
 
 const Finances = sequelize.define('Finances', {
     finance_id: {
@@ -35,5 +34,6 @@ const Finances = sequelize.define('Finances', {
 });
 
 module.exports = Finances;
+
 
 

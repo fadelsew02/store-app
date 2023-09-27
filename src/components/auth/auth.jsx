@@ -1,4 +1,5 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
+import Cookies from 'js-cookie';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({children}) => {
@@ -8,8 +9,26 @@ export const AuthProvider = ({children}) => {
     const [itemsBought, setItemsBought] = useState([]);
     const [badge, setBadge] = useState(false)
     
-    const loginOkay = (id) => {
+
+
+    useEffect(() => {
+        const authToken = Cookies.get('token');
+        if (authToken) {
+          setToken(authToken);
+        }
+      }, []);
+    
+    /**
+     * Description placeholder
+     * @date 19/09/2023 - 09:47:45
+     *
+     * @param {*} id
+     */
+    const loginOkay = (id, authToken) => {
        setLoggedId(id);
+       // Stockez le token dans un cookie sécurisé avec une expiration de 5 jours
+        Cookies.set('token', authToken, { expires: 5 }); // Le token expirera après 5 jours
+
     }
 
     const getIdStore = (id_store) => {

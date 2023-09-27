@@ -1,5 +1,4 @@
 
-// users.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
@@ -33,3 +32,4 @@ const Customers = sequelize.define('Customers', {
 });
 
 module.exports = Customers;
+

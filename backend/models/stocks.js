@@ -1,10 +1,9 @@
 
-// stockMovements.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Stores = require('./stores');
-const Items = require('./items');
+// const Stores = require('./stores');
+// const Items = require('./items');
 
 const Stocks = sequelize.define('Stocks', {
     stock_id: {

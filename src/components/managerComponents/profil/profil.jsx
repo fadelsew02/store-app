@@ -1,8 +1,11 @@
 import { Modal, TextField, Button } from '@mui/material';
+
 import React, { useEffect, useState } from 'react';
 import { MdPerson } from 'react-icons/md';
+
 import { getEntity, putEntity } from '../../../utils/requests';
 import { useAuth } from '../../auth/auth';
+
 import './profil.scss';
 
 const Profil = () => {
@@ -84,15 +87,7 @@ const Profil = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '100%',
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <div className='fake-bod'>
       <div className="card">
         <div className="upper-container">
           <div className="image-container">
@@ -167,3 +162,4 @@ const Profil = () => {
 };
 
 export default Profil;
+

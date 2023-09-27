@@ -1,13 +1,24 @@
-// const express = require('express');
 const InventoryMovements = require('../models/inventoryMovements'); 
 const sequelize = require('../models/index'); 
 const { QueryTypes } = require('sequelize');
 
 
+
+
+/**
+ * A chaque valeur de 'value' cette fonction crée une nouvelle ligne dans la table
+ * @date 18/09/2023 - 16:09:28
+ *
+ * @async
+ * @param {number} storeId il s'agit de l'id du store concerné par le ravitaillement
+ * @param {number} value Prend succesivement les ids contenues dans le tableau item_chosenId
+ * @param {number} quantity 
+ * @returns {}
+ */
 async function insertDataIntoTable(storeId, value, quantity) {
     const orderDate = new Date(); 
     try {
-        const newInventory = await InventoryMovements.create({
+        await InventoryMovements.create({
             store_id: storeId.store_id,
             item_id: value.item_id,
             movement_date: orderDate,
@@ -33,6 +44,7 @@ module.exports = {
             return res.status(401).json({ 'message': error });
         }
     },
+
     history: async (req, res) => {
         const id_store = req.params.id_store
         try{
@@ -59,7 +71,6 @@ module.exports = {
                     "InventoryMovements" im
                 WHERE store_id = ${id_store};
             `;
-
             const results = await sequelize.query(sqlQuery, { type: QueryTypes.SELECT });
             return res.status(200).json({'results': results});
         } catch (error) {

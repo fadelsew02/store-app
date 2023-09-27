@@ -1,4 +1,3 @@
-// const express = require('express');
 const Stocks = require('../models/stocks');
 const Orders = require('../models/orders');
 const OrderDetails = require('../models/orderDetails')
@@ -24,11 +23,10 @@ async function insertDataIntoTable(montant, customer_id, total_amount, storeId) 
         });
         return newOrder;
     } catch (error) {
-        return false;
         console.error(error)
+        return false;
     }
 }
-
 
 async function insertDataIntoOrderDetails(quantity, item_id, price_per_item, order_id) {
     try {
@@ -38,15 +36,14 @@ async function insertDataIntoOrderDetails(quantity, item_id, price_per_item, ord
             price_per_item: price_per_item,
             order_id: order_id
         });
-
     } catch (error) {
-        return false;
         console.error(error)
+        return false;
     }
 }
 
 module.exports = {
-    // Afficher tous les fournisseurs
+
     display: async (req, res) => {
         const id_store = req.params.id_store;
         try {
@@ -125,7 +122,7 @@ module.exports = {
         }
     },
     
-       panier: async (req, res) => {
+    panier: async (req, res) => {
         const arrayOfIds = req.body.ids;
         let results = [];
 
@@ -187,7 +184,6 @@ module.exports = {
             return res.status(401).json({ 'message': error });
         }
     }
-
 }
 
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   Select,
   MenuItem,
@@ -9,11 +10,10 @@ import {
   OutlinedInput,
   Button,
 } from "@mui/material";
+
 import { useAuth } from "../../auth/auth";
-
-import History from "../../historyInventory/history";
-
 import { getEntity, postEntity } from "../../../utils/requests";
+import History from "../../historyInventory/history";
 
 import "./ravitailler.scss";
 
@@ -55,7 +55,6 @@ const Ravitaillement = () => {
         setErrorSuppliers("Erreur lors de la récupération des fournisseurs");
       }
     }
-
     fetchData();
   }, []);
 
@@ -98,10 +97,10 @@ const Ravitaillement = () => {
     }
   }
 
-  async function postDataInventory(storeIdentifiant) {
+  async function postDataInventory(storeIdentifier) {
     try {
       const response = await postEntity("inventory/commander", {
-        storeId: storeIdentifiant,
+        storeId: storeIdentifier,
         item_chosenId: itemIds,
         quantity: quantity,
       });
@@ -111,7 +110,7 @@ const Ravitaillement = () => {
         setQuantity(10);
         setSkip(true);
       } else {
-            setMsg("Une erreur est survenue lors de la commande");
+        setMsg("Une erreur est survenue lors de la commande");
       }
     } catch (error) {
       console.error("Erreur lors de la commande :", error);
@@ -120,7 +119,6 @@ const Ravitaillement = () => {
   }
 
   const handleInventory = async () => {
-
     try {
         const promises = itemChoose.map((itemChosenName) =>
           fetchDataId(itemChosenName)
@@ -131,7 +129,7 @@ const Ravitaillement = () => {
         } else {
           // Les IDs ne sont pas encore récupérés pour tous les articles
           console.log("Les IDs des articles n'ont pas encore été récupérés.");
-          alert("Réessayez !");
+          alert("Try again !");
         }
     } catch (error) {
       console.error("Erreur lors de la récupération des ID des items choisis :", error);
@@ -149,27 +147,16 @@ const Ravitaillement = () => {
   };
 
   return (
-    <div
-      className="main-body"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        width: "100%",
-        overflow: "hidden"
-      }}
-    >
+    <div className="main-body">
       <div className="fake-body">
         <div className="main-container">
           <form>
             <div> {msg !== "" ? <span> {msg} </span> : <span></span>} </div>
             <div >
               <FormControl className="alias-input">
-                <InputLabel> Quel fournisseur ? </InputLabel>
+                <InputLabel> Which supplier ? </InputLabel>
                 <Select
-                  label="Fournisseur"
+                  label="Supplier"
                   onChange={(e) => handleSupplier(e)}
                 >
                   {suppliers ? (
@@ -220,10 +207,10 @@ const Ravitaillement = () => {
             </div>
             <div>
               <FormControl className="alias-input">
-                <InputLabel> Quantité </InputLabel>
+                <InputLabel> Quantity </InputLabel>
                 <Select
                   value={quantity}
-                  label="Quantité"
+                  label="Quantity"
                   onChange={(e) => handleQuantity(e)}
                 >
                   <MenuItem value={10}> 10 </MenuItem>
@@ -257,3 +244,4 @@ const Ravitaillement = () => {
 };
 
 export default Ravitaillement;
+

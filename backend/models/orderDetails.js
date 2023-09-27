@@ -1,9 +1,8 @@
-// orderDetails.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Items = require('./items');
-const Orders = require('./orders');
+// const Items = require('./items');
+// const Orders = require('./orders');
 
 const OrderDetail = sequelize.define('OrderDetail', {
     detail_id: {

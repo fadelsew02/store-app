@@ -3,7 +3,7 @@ const cors = require('cors');
 // const { Pool } = require('pg');
 const bodyParser = require('body-parser'); 
 const apiRouter = require('./apiRouter').router;
-const db = require('./models/db');
+// const db = require('./models/db');
 const sequelize = require('./models/index')
 
 
@@ -21,11 +21,6 @@ const insertFinanceData = require('./scripts/insertFinance');
 
 const app = express();
 
-// const corsOptions = {
-//     origin: 'http://localhost:3000', // Remplacez par l'URL de votre application React en production
-//     optionsSuccessStatus: 200
-//   };
-
 // Utilisation du middleware CORS
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,15 +36,15 @@ app.use('/api/', apiRouter);
 
       await sequelize.sync({force: true})
 
-      // Exécutez les scripts d'insertion
+      // Exécutez les scripts d'insertions
       await insertCategories();
       await insertManagers();
+      await insertStores();
       await insertSuppliers();
       await insertCustomers();
-      await insertStores();
       await insertItems();
       await insertInventory();
-      await insertOrders();
+      await insertOrders();   
       await insertStockData();
       await insertOrderDetailsData();
       await insertFinanceData();

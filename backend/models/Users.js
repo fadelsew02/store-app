@@ -1,5 +1,4 @@
 
-// users.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 

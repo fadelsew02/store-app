@@ -1,5 +1,4 @@
 
-// categories.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
@@ -20,3 +19,4 @@ const Categories = sequelize.define('Categories', {
 });
 
 module.exports = Categories;
+

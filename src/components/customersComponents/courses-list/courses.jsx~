@@ -1,0 +1,57 @@
+import React, { useState, useEffect } from 'react';
+import { Container, Card, CardActions, CardMedia, Typography, CardContent, Button, Pagination, Modal, Box, TextField, CircularProgress, Stack } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
+import { getEntity } from '../../../utils/requests';
+import { useAuth } from '../../auth/auth'
+
+import './courses.scss';
+
+const List = /**
+ * Description placeholder
+ * @author Fadel SEWADE
+ * @date 18/09/2023 - 16:22:40
+ *
+ * @returns {JSXElement}
+ */
+() => {
+
+  const [error, setError] = useState('');
+  const [listCourses, setListCourses] = useState([]);
+  const auth = useAuth();
+
+
+  
+  useEffect(()=>{
+    async function fetchData() {
+      try {
+        const response = await getEntity(`stocks/listes+de+courses/${auth.loggedId}`)
+        if (response.data.success === true) {
+          setListCourses(response.data.results);
+        } else {
+          setError('Erreur lors de la récupération du stock');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchData();
+  })
+
+  return (
+    <Container>
+       <Stack></Stack>
+    </Container>
+  );
+}
+
+export default List;
+
+
+

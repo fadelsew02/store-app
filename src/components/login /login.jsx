@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import {  postEntity, getEntity } from '../../utils/requests'; 
 
+
 import loginBg from '../../assets/images/bg-login.jpg'
 import './login.scss';
 
@@ -36,11 +37,16 @@ const Login = () => {
                     
                     setTimeout(async () => {
                         if(response.data.role === 'owner'){
-                            auth.loginOkay(0);
+                            auth.loginOkay(0, null);
                             navigate("/owners", {replace: true}); 
                         } else if( response.data.role === 'manager'){
-                            auth.loginOkay(response.data.results);
-                            auth.getToken(response.data.token)
+                            auth.loginOkay(response.data.results, response.data.token);
+                            // auth.getToken(response.data.token)
+                             // Stockez le token dans un cookie sécurisé avec une expiration de 5 jours
+                            // Cookies.set('token', response.data.token, { expires: 5 });
+
+                            // Vous pouvez également stocker une indication de connexion pour gérer la déconnexion
+                            // Cookies.set('isLoggedIn', 'true'); // Indique que l'utilisateur est connecté
                             try{
                                 const reponse = await getEntity(`stores/getStoreId/${response.data.results}`);
                                 if(reponse.data.success === true){
@@ -56,8 +62,8 @@ const Login = () => {
                             }
                             navigate("/manager", {replace: true}) 
                         } else if(response.data.role === 'customer'){
-                            auth.loginOkay(response.data.results);
-                            auth.getToken(response.data.token)
+                            auth.loginOkay(response.data.results, response.data.token);
+                            // auth.getToken(response.data.token)
                             navigate("/customers", {replace: true}) 
                         } else {
                             navigate("*") 

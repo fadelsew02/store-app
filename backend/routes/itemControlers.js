@@ -1,9 +1,6 @@
-// const express = require('express');
 const Items = require('../models/items'); 
 
-
 module.exports = {
-    // Afficher tous les fournisseurs
     display: async (req, res) => {
         const categorie = req.params.cat;
         try {
@@ -19,7 +16,6 @@ module.exports = {
     },
     
     getAllId: async (req, res) => {
-        
         const itemName = req.params.itemName;
         try {
             const item_id = await Items.findOne({

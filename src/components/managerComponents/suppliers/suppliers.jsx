@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+
 import { getEntity, removeEntity } from '../../../utils/requests';
+
 import { Box, Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip, Modal } from '@mui/material';
 
 import './suppliers.scss';
@@ -8,6 +10,20 @@ const Suppliers = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [error, setError] = useState('');
   const [idSupp, setIdSupp] = useState(null);
+  const [open, setOpen] = useState(false);
+
+
+  const style = {
+    position: 'absolute',
+    top:'50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 6,
+};
 
   useEffect(() => {
     async function fetchData() {
@@ -23,9 +39,17 @@ const Suppliers = () => {
         setError('Erreur lors de la récupération des fournisseurs');
       }
     }
-
     fetchData();
   }, []);
+
+  const handleOpen = (id) => {
+    setIdSupp(id);
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   const handleDelete = async () => {
     try {
@@ -33,9 +57,7 @@ const Suppliers = () => {
       if (response.data.success === true) {
         handleClose();
         // Mettez à jour la liste des fournisseurs après la suppression
-        setSuppliers((prevSuppliers) =>
-          prevSuppliers.filter((supplier) => supplier.supplier_id !== idSupp)
-        );
+        setSuppliers((prevSuppliers) => prevSuppliers.filter((supplier) => supplier.supplier_id !== idSupp));
       } else {
         setError('Une erreur est survenue lors de la suppression');
       }
@@ -46,50 +68,29 @@ const Suppliers = () => {
   };
     
     
-    const findTooltip = (id_category) => {
-          if(id_category === 1){
-              return "Vêtements";
-          } else if(id_category === 2){
-              return "Electronique";
-          } else if(id_category === 3){
-              return "Alimentation";
-          } else if(id_category === 4){
-              return "Beauté";
-          } else if(id_category === 5){
-              return "Maison";
-          } else if(id_category === 6){
-              return "Sport";
-          } else if(id_category === 7){
-              return "Santé";
-          } else if(id_category === 8){
-              return "Art";
-          } else if(id_category === 9){
-              return "Animaux";
-          } else {
-              return "Outils";
-          }
-      }
-      
-      const style = {
-          position: 'absolute',
-          top:'50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 6,
-      };
-      
-      const [open, setOpen] = useState(false);
-      const handleOpen = (id)=>{
-            setIdSupp(id);
-          setOpen(true);
-      }
-      const handleClose = ()=>{
-          setOpen(false);
-      }
+    // const findTooltip = (id_category) => {
+    //       if(id_category === 1){
+    //           return "Vêtements";
+    //       } else if(id_category === 2){
+    //           return "Electronique";
+    //       } else if(id_category === 3){
+    //           return "Alimentation";
+    //       } else if(id_category === 4){
+    //           return "Beauté";
+    //       } else if(id_category === 5){
+    //           return "Maison";
+    //       } else if(id_category === 6){
+    //           return "Sport";
+    //       } else if(id_category === 7){
+    //           return "Santé";
+    //       } else if(id_category === 8){
+    //           return "Art";
+    //       } else if(id_category === 9){
+    //           return "Animaux";
+    //       } else {
+    //           return "Outils";
+    //       }
+    //   }
       
   return (
     <div className="main-content">
@@ -123,11 +124,9 @@ const Suppliers = () => {
                       <TableCell>{supplier.supplier_name}</TableCell>
                       <TableCell>{supplier.contact_email}</TableCell>
                       <TableCell>{supplier.contact_phone}</TableCell>
-                        <Tooltip title={ findTooltip(supplier.category_id) } placement="top-start">
-                            <TableCell><Button variant="text">{supplier.category_id}</Button></TableCell>
-                        </Tooltip>
+                      <TableCell>{supplier.item_name}</TableCell>
                       <TableCell>
-                        <Button variant="contained" color="error" onClick={id => handleOpen(supplier.supplier_id)}>Supprimer </Button>
+                        <Button variant="contained" color="error" onClick={() => handleOpen(supplier.supplier_id)}>Supprimer </Button>
                       </TableCell>
                     </TableRow>
                   )) : <TableRow>{error || 'Chargement en cours '}</TableRow>}
@@ -156,3 +155,4 @@ const Suppliers = () => {
 }
 
 export default Suppliers
+

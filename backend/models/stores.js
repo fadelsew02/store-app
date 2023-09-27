@@ -1,9 +1,8 @@
 
-// stores.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Managers = require('./managers');
+// const Managers = require('./managers');
 
 const Stores = sequelize.define('Stores', {
     store_id: {

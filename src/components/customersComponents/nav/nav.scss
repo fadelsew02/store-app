@@ -84,13 +84,13 @@
         .nav-div{
             height: 70%;
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
             position: relative;
 
             .ul-nav-div{
                 position: absolute;
-                top: 60px;
+                top: 100px;
                 left: -15px;
                 width: 100%;
     
@@ -210,6 +210,7 @@
         content: '\2190';
     }
 }
+
 
 
 

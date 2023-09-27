@@ -56,18 +56,6 @@ const Nav = () => {
                             <span className='title'>Mes listes de courses</span>
                         </NavLink>
                     </li>
-                     <li>
-                        <NavLink to='mes+factures' className='lien'>
-                            <span className='icon'><FaCreditCard style={{fontSize: '30px'}} /></span>
-                            <span className='title'>Payer mes factures</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to='search' className='lien'>
-                            <span className='icon'><FaSearch style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Rechercher</span>
-                        </NavLink>
-                    </li>
                 </ul>
             </div>
             <div className='logout-div'>
@@ -87,56 +75,3 @@ const Nav = () => {
 }
 
 export default Nav
-
-
-
-// Bien sûr, voici des suggestions d'icônes React-Icons ou Material-UI pour chaque point énuméré :
-
-// 1. **Consultation de Produits** :
-//    - Icônes possibles : `BiSearch`, `MdViewList`, `MdViewModule`, `FaSearch`, `FiShoppingBag`.
-
-// 2. **Création de Liste de Courses** :
-//    - Icônes possibles : `FaClipboardList`, `BiListCheck`, `MdPlaylistAdd`, `FiList`.
-
-// 3. **Passer des Commandes** :
-//    - Icônes possibles : `MdShoppingCart`, `BiCart`, `FiShoppingCart`.
-
-// 4. **Système de Paiement** :
-//    - Icônes possibles : `MdPayment`, `BiCreditCard`, `FaCreditCard`, `FiDollarSign`.
-
-// 5. **Historique des Achats** :
-//    - Icônes possibles : `MdHistory`, `BiTime`, `FiClock`.
-
-// 6. **Programme de Fidélité** :
-//    - Icônes possibles : `MdStars`, `BiMedal`, `MdCardMembership`.
-
-// 7. **Avis et Évaluations** :
-//    - Icônes possibles : `MdRateReview`, `BiStar`, `FiStar`.
-
-// 8. **Notifications** :
-//    - Icônes possibles : `MdNotifications`, `BiBell`, `FiBell`.
-
-// 9. **Support Client** :
-//    - Icônes possibles : `MdLiveHelp`, `BiChat`, `FiHelpCircle`.
-
-// 10. **Personnalisation** :
-//     - Icônes possibles : `MdTune`, `BiFilter`, `FiSettings`.
-
-// 11. **Programmation de Livraisons** :
-//     - Icônes possibles : `MdEvent`, `BiCalendar`, `FiCalendar`.
-
-// 12. **Options de Retrait en Magasin** :
-//     - Icônes possibles : `MdStore`, `BiStore`, `FiShoppingBag`.
-
-// 13. **Réseaux Sociaux** :
-//     - Icônes possibles : `MdShare`, `BiShare`, `FiShare`.
-
-// 14. **Événements et Ateliers** :
-//     - Icônes possibles : `MdEventSeat`, `BiCalendarEvent`, `FiCalendar`.
-
-// 15. **Gestion de Compte Client** :
-//     - Icônes possibles : `MdPerson`, `BiUser`, `FiUser`.
-
-// 16. **Assistance Technique** :
-//     - Icônes possibles : `MdHelp`, `BiSupport`, `FiLifeBuoy`.
-

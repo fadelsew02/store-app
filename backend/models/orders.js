@@ -1,10 +1,9 @@
 
-// orders.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Stores = require('./stores');
-const Customers = require('./customers');
+// const Stores = require('./stores');
+// const Customers = require('./customers');
 
 const Orders = sequelize.define('Orders', {
     order_id: {

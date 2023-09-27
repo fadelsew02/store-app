@@ -7,3 +7,4 @@ const sequelize = new Sequelize('tpstores', 'fadelsew', 'azerty', {
 });
 
 module.exports = sequelize;
+

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { getEntity } from '../../../utils/requests';
+
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Pagination } from '@mui/material';
 
-import './stock.scss';
+import { getEntity } from '../../../utils/requests';
 import Finance from '../finance/finance';
 import { useAuth } from '../../auth/auth';
+
+import './stock.scss';
 
 const Stock = () => {
   const [stock, setStock] = useState([]);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
-
   const auth = useAuth();
 
   useEffect(() => {
@@ -29,11 +30,10 @@ const Stock = () => {
         setError('Erreur lors de la récupération du stock');
       }
     }
-
     fetchData();
   }, []);
 
-  const handlePageChange = (event, newPage) => {
+  const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
 
@@ -94,3 +94,4 @@ const Stock = () => {
 }
 
 export default Stock;
+
