@@ -28,6 +28,7 @@ const Profil = () => {
   useEffect(() => {
     async function fetchData() {
       try {
+        console.log(auth.token)
         const response = await getEntity(`users/me/${auth.token}`);
         if (response.data.success === true) {
           if (response.data.results.hasOwnProperty('manager_phone')) {

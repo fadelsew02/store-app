@@ -147,7 +147,7 @@ const Ravitaillement = () => {
   };
 
   return (
-    <div className="main-body">
+    <div style={{overflow: 'hidden'}}>
       <div className="fake-body">
         <div className="main-container">
           <form>
