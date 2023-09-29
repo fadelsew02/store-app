@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { REACT_APP_API_BASE_URL } from './constants';
+import { REACT_APP_API_BASE_URL_PROD } from './constants';
 
 const HTTP_STATUS = {
   UNAUTHORIZED: 401,
@@ -10,11 +10,6 @@ const HTTP_STATUS = {
 
 axios.interceptors.request.use((config) => {
     config.headers['Content-Type'] = 'application/json';
-    // if(auth.token){
-    //     config.headers['Authorization'] = `Bearer ${auth.token}`;
-    //     config.headers['Accept'] = 'application/ld+json';
-    // }
-    // console.log(config)
   return config;
 }, (err) => {
   console.error('Erreur', err);
@@ -29,9 +24,6 @@ axios.interceptors.response.use((response) => {
     return response;
   }, (err) => {
     const error = err.response;
-    // console.error(error);
-    // console.log(err)
-    // error.data.success = false;
 
     if (error) {
         switch (error.status) {
@@ -65,7 +57,7 @@ const buildUrl = (entity_url) => {
   if (entity_url.startsWith('https://') || entity_url.startsWith('http://')) {
     return entity_url;
   }
-  return `${REACT_APP_API_BASE_URL}${entity_url}`;
+  return `${REACT_APP_API_BASE_URL_PROD}${entity_url}`;
 };
 
 export const getEntity = async (entity_url) => {
