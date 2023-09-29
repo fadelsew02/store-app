@@ -10,6 +10,7 @@ const HTTP_STATUS = {
 
 axios.interceptors.request.use((config) => {
     config.headers['Content-Type'] = 'application/json';
+    console.log(config)
   return config;
 }, (err) => {
   console.error('Erreur', err);
@@ -58,6 +59,7 @@ const buildUrl = (entity_url) => {
   if (entity_url.startsWith('https://') || entity_url.startsWith('http://')) {
     return entity_url;
   }
+  console.log(`${REACT_APP_API_BASE_URL_PROD}${api}${entity_url}`)
   return `${REACT_APP_API_BASE_URL_PROD}${api}${entity_url}`;
 };
 
