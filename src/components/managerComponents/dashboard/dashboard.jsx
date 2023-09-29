@@ -57,7 +57,8 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity(`stocks/display/${auth.idStore['store_id']}`)
+        console.log(auth.idStore)
+        const response = await getEntity(`stocks/display/${auth.idStore}`)
         if (response.data.success === true) {
             console.log(response.data.results)
           setStock(response.data.results);
