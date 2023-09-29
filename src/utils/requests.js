@@ -54,10 +54,11 @@ axios.interceptors.response.use((response) => {
   });
 
 const buildUrl = (entity_url) => {
+  const api = '/api/';
   if (entity_url.startsWith('https://') || entity_url.startsWith('http://')) {
     return entity_url;
   }
-  return `${REACT_APP_API_BASE_URL_PROD}${entity_url}`;
+  return `${REACT_APP_API_BASE_URL_PROD}${api}${entity_url}`;
 };
 
 export const getEntity = async (entity_url) => {
