@@ -18,7 +18,6 @@ const Stock = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-      console.log(auth.idStore)
         const response = await getEntity(`/stocks/display/${auth.idStore['store_id']}`);
         if (response.data.success) {
           setStock(response.data.results);
@@ -33,7 +32,7 @@ const Stock = () => {
     fetchData();
   }, []);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
 

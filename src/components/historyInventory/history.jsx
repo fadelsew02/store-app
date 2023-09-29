@@ -25,7 +25,6 @@ const History = (props) => {
             try {
                 // Utilisez la fonction getEntity pour effectuer la requête
                 const response = await getEntity(`inventory/history/${auth.idStore['store_id']}`);
-                console.log(props.skip)
                 if (response.data.success === true) {
                     setHistory(response.data.results);
                 }

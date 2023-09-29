@@ -57,10 +57,9 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log(auth.idStore)
+        console.log(auth.idStore.store_id)
         const response = await getEntity(`stocks/display/${auth.idStore}`)
         if (response.data.success === true) {
-            console.log(response.data.results)
           setStock(response.data.results);
         } else {
           setError('Erreur lors de la récupération du stock');
@@ -78,7 +77,7 @@ const Dashboard = () => {
     }
   }, [stock]);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
 

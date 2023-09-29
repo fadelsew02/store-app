@@ -52,7 +52,6 @@ const Login = () => {
                                 if(reponse.data.success === true){
                                     const storeID = reponse.data.results;
                                     setStore_Id(reponse.data.results)
-                                    console.log(storeID)
                                     auth.getIdStore(storeID);
                                 } else {
                                     setError('Erreur lors de la récupération du storeID')
