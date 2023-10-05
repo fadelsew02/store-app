@@ -9,6 +9,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
+import { useNavigate } from 'react-router-dom';
+
 import { postEntity } from '../../../utils/requests';
 import { useAuth } from '../../auth/auth'
 
@@ -23,6 +25,7 @@ const Panier = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [arrayOfObject, setArrayOfObject] = useState([]);
   const [open, setOpen] = useState(false);
+  const naviget = useNavigate();
 
   const auth = useAuth();
 
@@ -44,6 +47,12 @@ const Panier = () => {
     }
     fetchData();
   }, [auth.itemsBought]);
+
+  useEffect(() => {
+    if (auth.itemsBought.length === 0) {
+      setError("Votre panier est vide.");
+    }
+  }, []);
 
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -195,9 +204,23 @@ const Panier = () => {
     </Card>
   ));
 
+  const handleClosePayment = () => {
+    setPaymentSuccess(false)
+
+    setTimeout(()=>{
+      Location.reload();
+      naviget("dashboard", {replace: true});
+    }, 2000);
+  }
+
   return (
     <>
-      {
+      { error && (
+        <div style={{ textAlign: 'center', fontSize: '18px', marginTop: '20px' }}>
+          {error}
+        </div>
+      )
+      }{
         basket && basket.length > 0 ? 
           <div className='containerPanier'>
             { renderPanier } 
@@ -246,7 +269,7 @@ const Panier = () => {
                     </div>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={() => setPaymentSuccess(false)}>Fermer</Button>
+                    <Button onClick={handleClosePayment}>Fermer</Button>
                   </DialogActions>
             </Dialog>
           </div>

@@ -22,8 +22,8 @@ import ProfilComponent from './components/customersComponents/profil/profil';
 import DashboardComponent from './components/customersComponents/dashboard/dashboard';
 import Courses from './components/customersComponents/courses-list/courses';
 import Panier from './components/customersComponents/panier/panier';
-import Facture from './components/customersComponents/facture/facture';
-import Search from './components/customersComponents/search/search';
+// import Facture from './components/customersComponents/facture/facture';
+// import Search from './components/customersComponents/search/search';
 
 // import Protected from './components/protected/protected';
 // import ProtectedOwner from './components/protected/protectedOwner';
@@ -57,7 +57,6 @@ function App() {
               <Route path='profil' element={<ProfilComponent />} />
               <Route path='listes+de+courses' element={<Courses />} />
               <Route path='panier' element={<Panier />} />
-              <Route path='mes+factures' element={<Facture />} />
             </Route>
             <Route path="/loading" element={<Loading />} />
           </Route>

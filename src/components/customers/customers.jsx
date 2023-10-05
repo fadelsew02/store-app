@@ -1,44 +1,59 @@
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import Slide from '@mui/material/Slide';
 import Nav from '../customersComponents/nav/nav';
-import LogoutDialog from '../logout/logout';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Customer = () => {
 
-  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
-  const navigate = useNavigate(); 
+  const [open, setOpen] = useState(false);
+  const naviget = useNavigate(); 
 
-  const handleConfirmLogout = async () => {
-    // Placez ici la logique pour déconnecter l'utilisateur,
-    // par exemple, en supprimant le cookie de token et en le redirigeant vers la page de connexion.
 
-    // Exemple de suppression du cookie de token
+  const handleConfirm = () => {
+    // Supprimez le cookie
     Cookies.remove('token');
+    Cookies.remove('store_id');
 
-    // Rediriger l'utilisateur vers la page de connexion
-    
-    navigate('/login', {replace: true});
+    // Redirigez vers la page de connexion
+    naviget("/login", {replace: true}) 
+  }
 
-    // Une fois la déconnexion effectuée, fermez la boîte de dialogue
-    setLogoutDialogOpen(false);
-  };
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
 
 
   return (
     <div className = 'customer-page' style={{display:'flex'}}>
-      <Nav onLogoutClick={() => setLogoutDialogOpen(true)} />
+      <Nav setProps={handleOpen} />
       <Outlet/>
-
-      {/* Boîte de dialogue de déconnexion */}
-      {logoutDialogOpen && (
-        <LogoutDialog
-          open={logoutDialogOpen}
-          onClose={() => setLogoutDialogOpen(false)}
-          onConfirm={handleConfirmLogout}
-        />
-      )}
+      <Dialog 
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => setOpen(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Confirmation de déconnexion</DialogTitle>
+        <DialogContent>
+          Êtes-vous sûr de vouloir vous déconnecter ?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} color="primary">
+            Confirm
+          </Button> 
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

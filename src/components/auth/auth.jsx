@@ -8,15 +8,8 @@ export const AuthProvider = ({children}) => {
     const [token, setToken] = useState(null);
     const [itemsBought, setItemsBought] = useState([]);
     const [badge, setBadge] = useState(false)
-    
 
-
-    useEffect(() => {
-        const authToken = Cookies.get('token');
-        if (authToken) {
-          setToken(authToken);
-        }
-      }, []);
+      
     
     /**
      * Description placeholder
@@ -25,13 +18,20 @@ export const AuthProvider = ({children}) => {
      * @param {*} id
      */
     const loginOkay = (id, authToken) => {
-       setLoggedId(id);
-       // Stockez le token dans un cookie sécurisé avec une expiration de 5 jours
-        Cookies.set('token', authToken, { expires: 5 }); // Le token expirera après 5 jours
-
-    }
+        setLoggedId(id);
+        setToken(authToken);
+        // console.log(authToken)
+        // Stocker le token dans le cookie
+        Cookies.set('token', authToken, { expires: 5 });
+      
+        // Stocker le token dans le stockage local
+        localStorage.setItem('token', authToken);
+      }
+      
 
     const getIdStore = (id_store) => {
+        localStorage.setItem('store_id', id_store)
+        console.log(id_store)
         setIdStore(id_store)
     }
     
@@ -43,12 +43,12 @@ export const AuthProvider = ({children}) => {
         setItemsBought((prevItems)=>[...itemsBought, id])
     }
     
-    const getBadge = (valeur) => {
-        setBadge(valeur);
+    const getBadge = (value) => {
+        setBadge(value);
     }
 
     return (
-        <AuthContext.Provider value={{ loggedId, loginOkay, idStore, getIdStore, token, getToken, itemsBought, getItemsBought, badge, getBadge }}>
+        <AuthContext.Provider value={{ loggedId, loginOkay, token, getToken, idStore, getIdStore, itemsBought, getItemsBought, badge, getBadge }}>
             {children}
         </AuthContext.Provider>
     );

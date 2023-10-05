@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { REACT_APP_API_BASE_URL_PROD } from './constants';
+import { REACT_APP_API_BASE_URL_DEV } from './constants';
 
 const HTTP_STATUS = {
   UNAUTHORIZED: 401,
@@ -58,7 +58,7 @@ const buildUrl = (entity_url) => {
   if (entity_url.startsWith('https://') || entity_url.startsWith('http://')) {
     return entity_url;
   }
-  return `${REACT_APP_API_BASE_URL_PROD}${api}${entity_url}`;
+  return `${REACT_APP_API_BASE_URL_DEV}${api}${entity_url}`;
 };
 
 export const getEntity = async (entity_url) => {

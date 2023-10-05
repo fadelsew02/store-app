@@ -7,18 +7,20 @@ import Finance from '../finance/finance';
 import { useAuth } from '../../auth/auth';
 
 import './stock.scss';
+import Cookies from 'js-cookie';
 
 const Stock = () => {
   const [stock, setStock] = useState([]);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
   const auth = useAuth();
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity(`/stocks/display/${auth.idStore['store_id']}`);
+        const store_id = Cookies.get('store_id');
+        const response = await getEntity(`/stocks/display/${store_id}`);
         if (response.data.success) {
           setStock(response.data.results);
         } else {
@@ -41,7 +43,7 @@ const Stock = () => {
   const currentItems = stock.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className='fake-body'>
+    <div className='fake-body-stock'>
       <div className='finance-div'>
         <Finance />
       </div>

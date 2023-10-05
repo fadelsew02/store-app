@@ -1,15 +1,14 @@
-
-
-
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import {  postEntity, getEntity } from '../../utils/requests'; 
+import Cookies from 'js-cookie';
 
 
 import loginBg from '../../assets/images/bg-login.jpg'
 import './login.scss';
+
 
 import { useAuth } from '../auth/auth';
 
@@ -41,18 +40,14 @@ const Login = () => {
                             navigate("/owners", {replace: true}); 
                         } else if( response.data.role === 'manager'){
                             auth.loginOkay(response.data.results, response.data.token);
-                            // auth.getToken(response.data.token)
-                             // Stockez le token dans un cookie sécurisé avec une expiration de 5 jours
-                            // Cookies.set('token', response.data.token, { expires: 5 });
-
-                            // Vous pouvez également stocker une indication de connexion pour gérer la déconnexion
-                            // Cookies.set('isLoggedIn', 'true'); // Indique que l'utilisateur est connecté
                             try{
                                 const reponse = await getEntity(`stores/getStoreId/${response.data.results}`);
                                 if(reponse.data.success === true){
                                     const storeID = reponse.data.results;
                                     setStore_Id(reponse.data.results)
-                                    auth.getIdStore(storeID);
+                                    auth.getIdStore(storeID.store_id);
+                                    // localStorage.setItem('store_id', storeID.store_id)
+                                    Cookies.set('store_id', storeID.store_id);
                                 } else {
                                     setError('Erreur lors de la récupération du storeID')
                                 }

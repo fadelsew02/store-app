@@ -30,7 +30,7 @@ const Register = () => {
           };
       
           try {
-            const response = await postEntity('/users/register', data);
+            const response = await postEntity('users/register', data);
       
             if (response.data.success === true) {
               setTimeout(() => {

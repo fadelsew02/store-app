@@ -1,9 +1,9 @@
-import { Modal, TextField, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { MdPerson } from 'react-icons/md';
-import { getEntity, putEntity } from '../../../utils/requests';
-import { useAuth } from '../../auth/auth';
+import { getEntity } from '../../../utils/requests';
 import './profil.scss';
+import Cookies from 'js-cookie';
 
 const Profil = () => {
   const [user, setUser] = useState('');
@@ -13,13 +13,12 @@ const Profil = () => {
   const [cont, setCont] = useState('');
   const [msg, setMsg] = useState('');
   const [ok, setOk] = useState(false);
-  // const [editModalOpen, setEditModalOpen] = useState(false);
-  const auth = useAuth();
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity(`users/me/${auth.token}`);
+        const token = Cookies.get('token')
+        const response = await getEntity(`users/me/${token}`);
         if (response.data.success === true) {
           if (response.data.results.hasOwnProperty('manager_phone')) {
             setOk(true);
@@ -89,13 +88,13 @@ const Profil = () => {
         <p>
           {msg !== '' ? <span className="error">{msg}</span> : <span></span>}
         </p>
-        <Button
+        {/* <Button
           variant="contained"
           color="secondary"
           sx={{ float: 'right', mr: '37%' }}
         >
           Modifier
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

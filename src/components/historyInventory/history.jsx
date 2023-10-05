@@ -7,6 +7,7 @@ import { getEntity } from '../../utils/requests';
 import { useAuth } from '../auth/auth';
 
 import './history.scss';
+import Cookies from 'js-cookie';
 
 const History = (props) => {
     const [history, setHistory] = useState([]);
@@ -23,8 +24,9 @@ const History = (props) => {
     useEffect(() => {
         async function fetchData() {
             try {
+                const store_id = Cookies.get('store_id')
                 // Utilisez la fonction getEntity pour effectuer la requête
-                const response = await getEntity(`inventory/history/${auth.idStore['store_id']}`);
+                const response = await getEntity(`inventory/history/${store_id}`);
                 if (response.data.success === true) {
                     setHistory(response.data.results);
                 }

@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 
 import { Link, NavLink } from 'react-router-dom';
 
-import { MdAccountCircle, MdLogout, MdOutlineAttachMoney, MdHome, MdStoreMallDirectory } from "react-icons/md";
+import { MdAccountCircle, MdLogout, MdHome, MdStoreMallDirectory } from "react-icons/md";
 import { FaArrowUp, FaBox } from "react-icons/fa";
 
 import './nav.scss';
 
-const Nav = () => {
+const Nav = (props) => {
 
     useEffect(() => {
         const navigation =  document.querySelector('.navigation')
@@ -74,7 +74,7 @@ const Nav = () => {
             </div>
             <div className='logout-div'>
                 <ul className='ul-logout-div'>
-                    <li>
+                    <li onClick={()=> props.setProps()}>
                         <NavLink to='#' className='lien'>
                             <span className='icon'><MdLogout style={{fontSize: '30px'}}/></span>
                             <span className='title'>Se déconnecter</span>

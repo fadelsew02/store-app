@@ -7,6 +7,7 @@ import { getEntity, putEntity } from '../../../utils/requests';
 import { useAuth } from '../../auth/auth';
 
 import './profil.scss';
+import Cookies from 'js-cookie';
 
 const Profil = () => {
   const [user, setUser] = useState('');
@@ -25,11 +26,23 @@ const Profil = () => {
   const handleEditModalOpen = () => setEditModalOpen(true);
   const handleEditModalClose = () => setEditModalOpen(false);
 
+  // useEffect(() => {
+  //   // Essayer de récupérer le token depuis le cookie ou le stockage local
+  //   const authToken = Cookies.get('token') || localStorage.getItem('token');
+  
+  //   // console.log(authToken);
+  
+  //   if (authToken) {
+  //     auth.getToken(authToken);
+  //   }
+  // }, []);
+
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log(auth.token)
-        const response = await getEntity(`users/me/${auth.token}`);
+        // console.log(auth.token)
+        const token = Cookies.get('token')
+        const response = await getEntity(`users/me/${token}`);
         if (response.data.success === true) {
           if (response.data.results.hasOwnProperty('manager_phone')) {
             setNom(response.data.results.manager_firstname);

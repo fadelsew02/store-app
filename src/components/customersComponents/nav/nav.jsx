@@ -9,7 +9,7 @@ import Badge from '@mui/material/Badge';
 import { useAuth } from  '../../auth/auth';
 import './nav.scss';
 
-const Nav = () => {
+const Nav = ( props ) => {
 
     const auth = useAuth();
 
@@ -60,7 +60,7 @@ const Nav = () => {
             </div>
             <div className='logout-div'>
                 <ul className='ul-logout-div'>
-                    <li>
+                    <li onClick={()=> props.setProps()}>
                         <NavLink to='#' className='lien'>
                             <span className='icon'><MdLogout style={{fontSize: '30px'}}/></span>
                             <span className='title'>Se déconnecter</span>

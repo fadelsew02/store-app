@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BiSort } from "react-icons/bi";
-import { Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Pagination, Modal, Box } from '@mui/material';
+import { Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Pagination, Modal, Box, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useAuth } from '../../auth/auth';
 import { getEntity } from '../../../utils/requests';
-import SearchComponent from '../search/search';
+// import SearchComponent from '../search/search';
 
 import './historique.scss';
+import Cookies from 'js-cookie';
 
 const Historique = () => {
   const [custom, setCustom] = useState([]);
@@ -14,7 +15,7 @@ const Historique = () => {
   const [error, setError] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
-  const [type, setType] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [ordersDetails, setOrdersDetails] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -23,7 +24,8 @@ const Historique = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity(`customers/display/${auth.idStore['store_id']}`);
+        const store_id = Cookies.get('store_id')
+        const response = await getEntity(`customers/display/${store_id}`);
         if (response.data.success === true) {
           setCustom(response.data.results);
         } else {
@@ -78,9 +80,13 @@ const Historique = () => {
     p: 5,
   };
 
+  let dataSearch = customers.filter(item => {
+    return Object.keys(item).some( key => item[key].toString().toLowerCase().includes(searchQuery.toString().toLowerCase()))
+  });
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = customers.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = dataSearch.slice(indexOfFirstItem, indexOfLastItem);
 
   const renderOrderDetails = ordersDetails.map((element, index) => (
     <TableRow key={index}>
@@ -102,22 +108,18 @@ const Historique = () => {
     </TableRow>
   ));
 
-  function searchType(typefiltre) {
-    setType(typefiltre);
-  }
-
-  let elemToSort;
-  if (type === '1') {
-    elemToSort = 'order_date';
-  } else if (type === '2') {
-    elemToSort = 'nom';
-  } else if(type === '3') {
-    elemToSort = 'total_amount';
-  }
-
   return (
-    <div className='fake-body'>
-      <SearchComponent list={custom} setList={setCustomers} filterField={(item) => item[elemToSort]} rechercheType={searchType} />
+    <div className='fake-body-historique'>
+      <div className="search-div">
+        <TextField
+          label = 'Search'
+          type='text'  
+          placeholder='Rechercher...'
+          value={searchQuery} 
+          className='textfield'
+          onChange={(e) => setSearchQuery(e.target.value) }/>
+      </div>
+      {/* <SearchComponent list={custom} setList={setCustomers} filterField={(item) => item[elemToSort]} rechercheType={searchType} /> */}
       <div className="main-content">
         <div className="row" style={{ width: '100%' }}>
           <div className="col-md-12">
@@ -126,7 +128,7 @@ const Historique = () => {
                 <div className="row">
                   <div className="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
                     <Typography variant="h5" ml="2"> Historique des Clients</Typography>
-                    <BiSort style={{ fontSize: '24px', float: 'right', marginLeft: '80%' }} className='sortIcone' />
+                    <BiSort style={{ fontSize: '24px', marginLeft: '75%' }} className='sortIcone' />
                   </div>
                 </div>
               </div>

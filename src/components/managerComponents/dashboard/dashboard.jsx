@@ -6,8 +6,9 @@ import { getEntity, putEntity } from '../../../utils/requests';
 import { useAuth } from '../../auth/auth'
 
 import './dashboard.scss';
+import Cookies from 'js-cookie';
 
-const Dashboard = () => {
+const Dashboard = ( props ) => {
   const [stock, setStock] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,10 +55,27 @@ const Dashboard = () => {
     gap: '30px',
   };
 
+  // useEffect(() => {
+
+  //     const authIdStore = localStorage.getItem('store_id');
+  
+  //     console.log(typeof parseInt(authIdStore));
+  //     console.log('un')
+  //     if (authIdStore) {
+  //       auth.getIdStore(parseInt(authIdStore));
+  //     }
+    
+  // }, []);
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity(`stocks/display/${auth.idStore.store_id}`)
+
+          // localStorage.setItem('store_id', auth.idStore)
+          // const id = localStorage.getItem('store_id')
+          const id = Cookies.get('store_id')
+        
+        const response = await getEntity(`stocks/display/${id}`)
         if (response.data.success === true) {
           setStock(response.data.results);
         } else {
@@ -68,6 +86,7 @@ const Dashboard = () => {
       }
     }
     fetchData();
+    
   }, []);
 
   useEffect(() => {
@@ -92,16 +111,15 @@ const Dashboard = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = stocks.slice(indexOfFirstItem, indexOfLastItem);
 
-
   const renderCard =  currentItems.map((element, id) => (
-    <Card sx={{ maxWidth: '270px', height: '360px' }} key={id}>
+    <Card sx={{ maxWidth: '270px', height: '330px' }} key={id}>
       <CardMedia
         component={'img'}
         image={element.url_photo}
         alt=""
-        sx={{ height: '210px' }}
+        sx={{ height: '195px' }}
       />
-      <CardContent sx={{ height: '110px' }}>
+      <CardContent sx={{ height: '100px' }}>
         <Typography gutterBottom variant="h6" sx={{ fontWeight: 'bold' }}>
           {element.item_name}
         </Typography>
@@ -153,11 +171,11 @@ const Dashboard = () => {
               </div>
             </Box>
           </Modal>
-        </div> : <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%'}} > {error ? error : <CircularProgress /> } </Box>
+          {props.data}
+        </div> : <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}} > {error ? error : <CircularProgress /> } </Box>
       }
     </>
   );
 }
 
 export default Dashboard;
-

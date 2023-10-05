@@ -4,6 +4,7 @@ import { getEntity } from '../../../utils/requests';
 import { useAuth } from '../../auth/auth';
 
 import './finance.scss';
+import Cookies from 'js-cookie';
 
 const Finance = () => {
   const [finances, setFinances] = useState({});
@@ -13,7 +14,8 @@ const Finance = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity(`finances/recuperer/${auth.idStore['store_id']}`);
+        const store_id = Cookies.get('store_id')
+        const response = await getEntity(`finances/recuperer/${store_id}`);
         if (response.data.success === true) {
           setFinances(response.data.results);
           console.log(response.data.results)

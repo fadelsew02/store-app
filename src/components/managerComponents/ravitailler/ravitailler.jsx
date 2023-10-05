@@ -9,6 +9,9 @@ import {
   Checkbox,
   OutlinedInput,
   Button,
+  Stack,
+  Snackbar,
+  Alert
 } from "@mui/material";
 
 import { useAuth } from "../../auth/auth";
@@ -16,6 +19,7 @@ import { getEntity, postEntity } from "../../../utils/requests";
 import History from "../../historyInventory/history";
 
 import "./ravitailler.scss";
+import Cookies from "js-cookie";
 
 const Ravitaillement = () => {
   const auth = useAuth();
@@ -29,6 +33,8 @@ const Ravitaillement = () => {
   const [msg, setMsg] = useState("");
   const [itemIds, setItemIds] = useState([]);
   const [skip, setSkip] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [disp, setDisp] = useState("none")
  
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -106,9 +112,14 @@ const Ravitaillement = () => {
       });
       if (response.data.success === true) {
         setMsg("Votre commande a été passée avec succès");
+        setDisp("block")
+        setOpen(true)
         setItemChoose([]);
         setQuantity(10);
         setSkip(true);
+        setTimeout(()=>{
+          Location.reload();
+        }, 1500)
       } else {
         setMsg("Une erreur est survenue lors de la commande");
       }
@@ -125,7 +136,7 @@ const Ravitaillement = () => {
         );
         // Vérifiez si tous les IDs ont été récupérés
         if (itemIds.length === itemChoose.length) {
-          postDataInventory(auth.idStore['store_id']);
+          postDataInventory(Cookies.get('store_id'));
         } else {
           // Les IDs ne sont pas encore récupérés pour tous les articles
           console.log("Les IDs des articles n'ont pas encore été récupérés.");
@@ -141,17 +152,22 @@ const Ravitaillement = () => {
       target: { value },
     } = event;
     setItemChoose(
-      // En cas d'autocomplétion, nous obtenons une valeur sous forme de chaîne.
       typeof value === "string" ? value.split(",") : value
     );
   };
 
+  const handleClose = (reason) => {
+    console.log(reason)
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
-    <div style={{overflow: 'hidden'}}>
-      <div className="fake-body">
-        <div className="main-container">
+    <div className="main-body-ravitailler">
+        <div className="main-container-ravitailler">
           <form>
-            <div> {msg !== "" ? <span> {msg} </span> : <span></span>} </div>
             <div >
               <FormControl className="alias-input">
                 <InputLabel> Which supplier ? </InputLabel>
@@ -234,8 +250,14 @@ const Ravitaillement = () => {
               </Button>
             </div>
           </form>
+          <Stack spacing={2} sx={{ width: '100%' }}>
+            <Snackbar open={open} autoHideDuration={1000} onClose={handleClose} anchorOrigin = {{ vertical: 'top', horizontal: 'right'}}>
+              <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                {msg}
+              </Alert>
+            </Snackbar>
+          </Stack>
         </div>
-      </div>
       <div className="history-div">
         <History skip = {skip}/>
       </div>
