@@ -5,6 +5,7 @@ import { getEntity, removeEntity } from '../../../utils/requests';
 import { Box, Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Tooltip, Modal } from '@mui/material';
 
 import './suppliers.scss';
+import Cookies from 'js-cookie';
 
 const Suppliers = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -28,7 +29,8 @@ const Suppliers = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity('/suppliers/display');
+        const store_id = Cookies.get('store_id')
+        const response = await getEntity(`/suppliers/display/${store_id}`);
         if (response.data.success === true) {
           setSuppliers(response.data.results);
         } else {

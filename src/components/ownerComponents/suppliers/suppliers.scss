@@ -1,0 +1,50 @@
+.main-content {
+    padding: 20px ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+$letterSpacing: 1px;
+
+/*--table design start----*/
+
+.table-wrapper {
+    background-color: #fff;
+    padding: 10px 35px;
+    width: 100%;
+    overflow: auto;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgb(0, 0, 0);
+
+    .table-title {
+        background: #353b48;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        width: 100%;
+        left: 0;
+        padding: 10px 30px;
+        border-radius: 0px 0px 0 0;
+    }
+}
+
+
+.textfield{
+    width: 100%;
+    outline: none;
+    font-weight: 200;
+    font-size: 14px;
+    letter-spacing: $letterSpacing;
+    background: transparent;
+    margin-bottom:8px;
+}
+
+.inputBx{
+    margin-block-end: 10px; 
+}
+
+
+/*--table design end----*/
+
