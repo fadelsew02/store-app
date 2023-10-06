@@ -63,11 +63,10 @@ const Login = () => {
                             navigate("*") 
                         }
                     }, 1500);
-                } else {
-                    setError(response.data.message)
-                }
+                } 
             } catch (error) {
                 console.error('Erreur de connexion', error);
+                setError(error.data.message)
             }
         }else{
             setError("All field are required ! ")
