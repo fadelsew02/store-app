@@ -3,7 +3,7 @@ import { REACT_APP_API_BASE_URL_DEV } from './constants';
 
 const HTTP_STATUS = {
   UNAUTHORIZED: 401,
-  BAD_REQUEST: 400,
+  BAD_REQUEST: 402,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
 };
@@ -24,7 +24,9 @@ axios.interceptors.response.use((response) => {
     return response;
   }, (err) => {
     const error = err.response;
-
+    // console.log(err)
+    // error.response.data.success = false;
+    // console.log(error.response.data.success)
     if (error) {
         switch (error.status) {
             case HTTP_STATUS.UNAUTHORIZED:
@@ -50,7 +52,7 @@ axios.interceptors.response.use((response) => {
         }
     }
     // Gère les erreurs de réponse
-    // return Promise.reject(error);
+    return Promise.reject(error);
   });
 
 const buildUrl = (entity_url) => {

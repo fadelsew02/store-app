@@ -36,10 +36,9 @@ const Register = () => {
               setTimeout(() => {
                 naviget("/loading"); //je dois le rediriger vers une page de loading
               }, 1500);
-            } else if(response.data.success === false) {
-                setError(response.data.message)
-            }
+            } 
           } catch (error) {
+            setError(error.data.message)
             console.error("Erreur d'enregistrement: ", error);
           }
         } else {
