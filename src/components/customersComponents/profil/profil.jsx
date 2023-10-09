@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { MdPerson } from 'react-icons/md';
 import { getEntity } from '../../../utils/requests';
-import './profil.scss';
+import './profile.scss';
 import Cookies from 'js-cookie';
 
 const Profil = () => {
@@ -60,7 +60,7 @@ const Profil = () => {
       <div className="card">
         <div className="upper-container">
           <div className="image-container">
-            <div>
+            <div className='madiv'>
               <MdPerson style={{ width: '140px', height: '140px' }} />
             </div>
           </div>

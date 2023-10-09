@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  ListItemText,
-  Checkbox,
-  OutlinedInput,
-  Button,
-  Stack,
-  Snackbar,
-  Alert
-} from "@mui/material";
+import { Select, MenuItem, FormControl, InputLabel, ListItemText, Checkbox, OutlinedInput, Button, Stack, Snackbar, Alert } from "@mui/material";
 
-import { useAuth } from "../../auth/auth";
 import { getEntity, postEntity } from "../../../utils/requests";
 import History from "../../historyInventory/history";
 
@@ -22,19 +9,17 @@ import "./ravitailler.scss";
 import Cookies from "js-cookie";
 
 const Ravitaillement = () => {
-  const auth = useAuth();
 
   const [suppliers, setSuppliers] = useState([]);
   const [items, setItems] = useState([]);
-  const [errorSuppliers, setErrorSuppliers] = useState("Aucun");
-  const [errorItems, setErrorItems] = useState("Aucun");
+  const [errorSuppliers, setErrorSuppliers] = useState("None");
+  const [errorItems, setErrorItems] = useState("None");
   const [itemChoose, setItemChoose] = useState([]);
   const [quantity, setQuantity] = useState(10);
   const [msg, setMsg] = useState("");
   const [itemIds, setItemIds] = useState([]);
   const [skip, setSkip] = useState(false);
   const [open, setOpen] = useState(false)
-  const [disp, setDisp] = useState("none")
  
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -50,15 +35,14 @@ const Ravitaillement = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getEntity("suppliers/display");
+        const stor_id = -1;
+        const response = await getEntity(`suppliers/display/${stor_id}`);
         if (response.data.success) {
           setSuppliers(response.data.results);
-        } else {
-          setErrorSuppliers("Erreur lors de la récupération des fournisseurs");
-        }
+        } 
       } catch (error) {
-        console.error("Erreur lors de la récupération des fournisseurs :", error);
-        setErrorSuppliers("Erreur lors de la récupération des fournisseurs");
+        console.error("Error retrieving suppliers :", error);
+        setErrorSuppliers("Error retrieving suppliers");
       }
     }
     fetchData();
@@ -72,16 +56,10 @@ const Ravitaillement = () => {
           const response = await getEntity(`items/display/${cat}`);
           if (response.data.success === true) {
             setItems(response.data.results);
-          } else {
-            setErrorItems(
-              "Impossible de récupérer les articles correspondants à ce fournisseur"
-            );
-          }
+          } 
         } catch (error) {
-          console.error("Erreur lors de la récupération des articles :", error);
-          setErrorItems(
-            "Impossible de récupérer les articles correspondants à ce fournisseur"
-          );
+          console.error("Unable to retrieve items matching this supplier :", error);
+          setErrorItems("Unable to retrieve items matching this supplier");
         }
         break;
       }
@@ -99,33 +77,36 @@ const Ravitaillement = () => {
         setItemIds((itemIds) => [...itemIds, response.data.results]);
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération de l'ID de l'article :", error);
+      setErrorItems("Error retrieving item ID")
+      console.error("Error retrieving item ID :", error);
     }
   }
 
   async function postDataInventory(storeIdentifier) {
+    console.log('cc')
     try {
       const response = await postEntity("inventory/commander", {
         storeId: storeIdentifier,
         item_chosenId: itemIds,
         quantity: quantity,
       });
+      console.log(storeIdentifier)
+      console.log(itemIds)
+      console.log(quantity)
+
       if (response.data.success === true) {
-        setMsg("Votre commande a été passée avec succès");
-        setDisp("block")
+        setMsg("Your order has been successfully placed");
         setOpen(true)
         setItemChoose([]);
         setQuantity(10);
         setSkip(true);
         setTimeout(()=>{
-          Location.reload();
+          window.location.reload();
         }, 1500)
-      } else {
-        setMsg("Une erreur est survenue lors de la commande");
       }
     } catch (error) {
-      console.error("Erreur lors de la commande :", error);
-      setMsg("Une erreur est survenue lors de la commande");
+      console.error("An error occurred during the order :", error);
+      setErrorItems("An error occurred during the order");
     }
   }
 
@@ -139,11 +120,12 @@ const Ravitaillement = () => {
           postDataInventory(Cookies.get('store_id'));
         } else {
           // Les IDs ne sont pas encore récupérés pour tous les articles
-          console.log("Les IDs des articles n'ont pas encore été récupérés.");
+          console.log("Article IDs have not yet been retrieved.");
           alert("Try again !");
         }
     } catch (error) {
-      console.error("Erreur lors de la récupération des ID des items choisis :", error);
+      console.error("Error when retrieving the IDs of the chosen items :", error);
+      setErrorItems("Error when retrieving the IDs of the chosen items")
     }
   };
 
@@ -246,7 +228,7 @@ const Ravitaillement = () => {
                   float: "right",
                 }}
               >
-                Passer la commande
+                To order
               </Button>
             </div>
           </form>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Card, ListItemButton, Typography, ListItemAvatar, Avatar, ListItem, ListItemText, List, Divider, CardContent, CardActions, Pagination, Box, CircularProgress } from '@mui/material';
-import { FixedSizeList } from 'react-window';
+// import { FixedSizeList } from 'react-window';
 import { getEntity } from '../../../utils/requests';
 
 import { useAuth } from '../../auth/auth'

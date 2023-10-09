@@ -104,7 +104,7 @@ const Suppliers = () => {
         setError("");
         setCategory(e.target.value)
         if(e.target.value === ""){
-          setError("Name non renseigné");
+          setError("CAtegory non renseigné");
         }
         break;
       case "phone":

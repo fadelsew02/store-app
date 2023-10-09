@@ -19,22 +19,27 @@
     
             .image-container{
                 div{
-                    background: white;
                     width: 150px;
                     height: 150px;
                     border-radius: 50%;
-                    padding: 5px;
-                    transform: translate(105px, 75px);
+                    position: relative;
+                    transform: translate(95px, 60px);
+                    font-size: 45px;
+                    cursor: pointer;
                 }
             }
         }
     
         .lower-container{
-            margin-top: 100px;
+            margin-top: 90px;
             height: 210px;
             background: white;
             text-align: center;
-    
+            
+            .error{
+                font-size: 0.8em;
+                color: red;
+            }
     
             h4{
                 margin: 0;

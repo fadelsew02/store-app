@@ -42,7 +42,18 @@ $letterSpacing: 1px;
 }
 
 .inputBx{
-    margin-block-end: 10px; 
+    margin-block-end: 10px;  
+    background-color: black;        
+
+    .textfield{
+        width: 100%;
+        outline: none;
+        font-weight: 200;
+        font-size: 14px;
+        letter-spacing: 2px;
+        background: transparent;
+        margin-bottom:80px;
+    }
 }
 
 

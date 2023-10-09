@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BiSort } from "react-icons/bi";
 import { Paper, Table, TableBody, Button, TableCell, TableContainer, TableHead, TableRow, Typography, Pagination, Modal, Box, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useAuth } from '../../auth/auth';
+
 import { getEntity } from '../../../utils/requests';
-// import SearchComponent from '../search/search';
 
 import './historique.scss';
 import Cookies from 'js-cookie';
@@ -12,14 +10,12 @@ import Cookies from 'js-cookie';
 const Historique = () => {
   const [custom, setCustom] = useState([]);
   const [customers, setCustomers] = useState([]);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [searchQuery, setSearchQuery] = useState('');
   const [ordersDetails, setOrdersDetails] = useState([]);
   const [open, setOpen] = useState(false);
-
-  const auth = useAuth();
 
   useEffect(() => {
     async function fetchData() {
@@ -28,14 +24,12 @@ const Historique = () => {
         const response = await getEntity(`customers/display/${store_id}`);
         if (response.data.success === true) {
           setCustom(response.data.results);
-        } else {
-          setError('Erreur lors de la récupération de l\'historique');
         }
       } catch (err) {
+        setError('Error retrieving history');
         console.error(err);
       }
     }
-
     fetchData();
   }, []);
 
@@ -56,10 +50,9 @@ const Historique = () => {
       const response = await getEntity(`ordersDetails/display/${id}`);
       if (response.data.success === true) {
         setOrdersDetails(response.data.results);
-      } else {
-        setError('Erreur lors de la récupération des détails');
       }
     } catch (err) {
+      setError('Error retrieving details');
       console.error(err);
     }
   };
@@ -80,7 +73,7 @@ const Historique = () => {
     p: 5,
   };
 
-  let dataSearch = customers.filter(item => {
+  let dataSearch = custom.filter(item => {
     return Object.keys(item).some( key => item[key].toString().toLowerCase().includes(searchQuery.toString().toLowerCase()))
   });
 
@@ -104,7 +97,7 @@ const Historique = () => {
       <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.prenom}</TableCell>
       <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.email}</TableCell>
       <TableCell sx={{ textAlign: 'center', fontSize: '17px' }}>{element.order_date.split('T')[0]}</TableCell>
-      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }} onClick={() => handleOrderDetails(element.order_id)} ><AddIcon /> </TableCell>
+      <TableCell sx={{ textAlign: 'center', fontSize: '17px' }} onClick={() => handleOrderDetails(element.order_id)} ><AddIcon sx={{cursor: 'pointer', ":hover": {backgroundColor: 'rgba(100,100,100,0.5)'}, borderRadius: '50%', padding: '2px', fontWeight: 'bold'}}/> </TableCell>
     </TableRow>
   ));
 
@@ -114,12 +107,11 @@ const Historique = () => {
         <TextField
           label = 'Search'
           type='text'  
-          placeholder='Rechercher...'
+          placeholder='Search...'
           value={searchQuery} 
           className='textfield'
           onChange={(e) => setSearchQuery(e.target.value) }/>
       </div>
-      {/* <SearchComponent list={custom} setList={setCustomers} filterField={(item) => item[elemToSort]} rechercheType={searchType} /> */}
       <div className="main-content">
         <div className="row" style={{ width: '100%' }}>
           <div className="col-md-12">
@@ -127,8 +119,7 @@ const Historique = () => {
               <div className="table-title">
                 <div className="row">
                   <div className="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
-                    <Typography variant="h5" ml="2"> Historique des Clients</Typography>
-                    <BiSort style={{ fontSize: '24px', marginLeft: '75%' }} className='sortIcone' />
+                    <Typography variant="h5" ml="2"> Customer History</Typography>
                   </div>
                 </div>
               </div>
@@ -137,16 +128,18 @@ const Historique = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ textAlign: 'center', fontSize: '20px' }}>N°</TableCell>
-                      <TableCell sx={{ textAlign: 'center', fontSize: '20px' }} >Nom </TableCell>
-                      <TableCell sx={{ textAlign: 'center', fontSize: '20px' }} >Prénoms </TableCell>
+                      <TableCell sx={{ textAlign: 'center', fontSize: '20px' }} >Surname </TableCell>
+                      <TableCell sx={{ textAlign: 'center', fontSize: '20px' }} >FirstName </TableCell>
                       <TableCell sx={{ textAlign: 'center', fontSize: '20px' }} >Email</TableCell>
                       <TableCell sx={{ textAlign: 'center', fontSize: '20px' }}>Date</TableCell>
-                      <TableCell sx={{ textAlign: 'center', fontSize: '20px' }}>Dépenses</TableCell>
+                      <TableCell sx={{ textAlign: 'center', fontSize: '20px' }}>Expenses</TableCell>
                       <TableCell sx={{ textAlign: 'center', fontSize: '20px' }}> Actions </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {renderCustomers}
+                    
+                      {renderCustomers} 
+                    
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -173,13 +166,15 @@ const Historique = () => {
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>N°</TableCell>
-                  <TableCell sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Article acheté </TableCell>
+                  <TableCell sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Item purchased</TableCell>
                   <TableCell sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Quantity</TableCell>
-                  <TableCell sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }} >Prix unitaire</TableCell>
+                  <TableCell sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}> Unit Price</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {renderOrderDetails}
+                {
+                  error && error !== null ? {renderOrderDetails} : <TableRow> {error} </TableRow> 
+                }
               </TableBody>
             </Table>
           </TableContainer> <br />

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { postEntity } from '../../utils/requests';
 
 import { Button, TextField, MenuItem, Select } from '@mui/material';
-// import axios from 'axios';
 
 import loginBg from '../../assets/images/bg-login.jpg'
 import './register.scss';
@@ -34,12 +33,12 @@ const Register = () => {
       
             if (response.data.success === true) {
               setTimeout(() => {
-                naviget("/loading"); //je dois le rediriger vers une page de loading
-              }, 1500);
+                naviget("/loading"); 
+              }, 500);
             } 
           } catch (error) {
             setError(error.data.message)
-            console.error("Erreur d'enregistrement: ", error);
+            console.error(error);
           }
         } else {
           setError("All field are required ! ");
@@ -98,12 +97,12 @@ const Register = () => {
         </div>
         <div className='contentBx'>
             <div className='formBx'>
-                <h2>Inscrivez-Vous </h2>
+                <h2>Sign Up </h2>
                 <p>{ error !== "" ? <span className="error">{error}</span> : <span></span> }</p>
                 <form>
                     <div className='inputBx'>
                         <TextField 
-                            label = 'Nom'
+                            label = 'LastName'
                             variant = 'outlined'
                             type='text' 
                             required
@@ -114,7 +113,7 @@ const Register = () => {
                     </div>
                     <div className='inputBx'>
                         <TextField 
-                            label = 'Prénoms'
+                            label = 'FirstName'
                             type='text'  
                             required
                             value={prenom} 
@@ -144,7 +143,7 @@ const Register = () => {
                     </div>
                     <div className='inputBx'>
                         <TextField 
-                            label = 'Mot de Passe'
+                            label = 'Password'
                             type='password'  
                             required
                             value={password} 
@@ -161,7 +160,7 @@ const Register = () => {
                                 label="Role"
                                 onChange={(event) => handleRoleChange(event)}
                             >
-                                <MenuItem value={1}>Client</MenuItem>
+                                <MenuItem value={1}>Customer</MenuItem>
                             </Select>
                     </div>
                     <div className='inputBx'>
@@ -170,7 +169,7 @@ const Register = () => {
                             color='success' 
                             onClick={handleSubmit}
                             className='buttonZone'
-                        >S'inscrire. </Button>
+                        >Sign up </Button>
                     </div>
                 </form> 
             </div>

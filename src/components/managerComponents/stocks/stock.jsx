@@ -4,7 +4,6 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 
 import { getEntity } from '../../../utils/requests';
 import Finance from '../finance/finance';
-import { useAuth } from '../../auth/auth';
 
 import './stock.scss';
 import Cookies from 'js-cookie';
@@ -14,7 +13,6 @@ const Stock = () => {
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
-  const auth = useAuth();
 
   useEffect(() => {
     async function fetchData() {
@@ -23,12 +21,10 @@ const Stock = () => {
         const response = await getEntity(`/stocks/display/${store_id}`);
         if (response.data.success) {
           setStock(response.data.results);
-        } else {
-          setError('Erreur lors de la récupération du stock');
-        }
+        } 
       } catch (error) {
-        console.error('Erreur lors de la récupération du stock :', error);
-        setError('Erreur lors de la récupération du stock');
+        console.error('Error retrieving stock :', error);
+        setError('Error retrieving stock');
       }
     }
     fetchData();
@@ -54,7 +50,7 @@ const Stock = () => {
               <div className="table-title">
                 <div className="row">
                   <div className="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
-                    <Typography variant="h5" ml="2"> Stocks du Magasin</Typography>
+                    <Typography variant="h5" ml="2"> Store Stock</Typography>
                   </div>
                 </div>
               </div>
@@ -65,8 +61,8 @@ const Stock = () => {
                     <TableRow>
                       <TableCell sx={{ textAlign: 'center', fontSize: '16px' }}>N°</TableCell>
                       <TableCell sx={{ textAlign: 'center', fontSize: '16px' }}>Articles</TableCell>
-                      <TableCell sx={{ textAlign: 'center', fontSize: '16px' }}>Quantité</TableCell>
-                      <TableCell sx={{ textAlign: 'center', fontSize: '16px' }}>Prix</TableCell>
+                      <TableCell sx={{ textAlign: 'center', fontSize: '16px' }}>Quantity</TableCell>
+                      <TableCell sx={{ textAlign: 'center', fontSize: '16px' }}>Price</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -77,7 +73,7 @@ const Stock = () => {
                         <TableCell sx={{ textAlign: 'center' }}>{element.quantity}</TableCell>
                         <TableCell sx={{ textAlign: 'center' }}>{element.price}</TableCell>
                       </TableRow>
-                    )) : <TableRow><TableCell colSpan={4}>{error || 'Chargement en cours '}</TableCell></TableRow>}
+                    )) : <TableRow><TableCell colSpan={4}>{error || 'Loading '}</TableCell></TableRow>}
                   </TableBody>
                 </Table>
               </TableContainer>

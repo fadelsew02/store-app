@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-// import { TypeAnimation } from 'react-type-animation';
 
 import loginBg from '../../assets/images/bg-login.jpg'
 import './loading.scss';
@@ -12,7 +11,7 @@ const Loading = () => {
     useEffect(()=>{
         setTimeout(() => {
             navigate("/", {replace: true});
-        }, 10000);
+        }, 2000);
     },[])
 
 
@@ -26,7 +25,7 @@ const Loading = () => {
                 <div className='cercle'></div>
                 <div className='cercle'></div>
                 <div className='cercle'></div>
-                <div className='loading'> Veuillez patientez ...</div>
+                <div className='loading'> Wait a few seconds ...</div>
             </div>
         </div>
     </section>

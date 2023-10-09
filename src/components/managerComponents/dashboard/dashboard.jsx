@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardActions, CardMedia, Typography, CardContent, Button, Pagination, Modal, Box, TextField, CircularProgress } from '@mui/material';
 
 import { getEntity, putEntity } from '../../../utils/requests';
-import { useAuth } from '../../auth/auth'
+// import { useAuth } from '../../auth/auth'
 
 import './dashboard.scss';
 import Cookies from 'js-cookie';
 
-const Dashboard = ( props ) => {
+const Dashboard = () => {
   const [stock, setStock] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +18,7 @@ const Dashboard = ( props ) => {
   const [stockRestant, setStockRestant] = useState(null);
   const [idEdited, setIdEdited] = useState(null);
   const [open, setOpen] = useState(false);
-  const auth = useAuth();
+  // const auth = useAuth();
 
   const handleOpen = (id) => {
     setIdEdited(id);
@@ -27,15 +27,18 @@ const Dashboard = ( props ) => {
 
   const handleClose = () => {
     setOpen(false);
+    window.location.reload();
   }
 
   const handleEdit = async () => {
-   const response = await putEntity('stocks/edit/', idEdited, { quantity: stockRestant });
+    const response = await putEntity('stocks/edit', { quantity: stockRestant, price: parseFloat(prix)}, idEdited);
     if(response.data.success === true){
-        setStock((prevStock) => prevStock.filter(stock => stock.stock_id !== idEdited))
-        console.log("Succès")
+      handleClose()
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
     } else {
-        setError('Une erreur est survenue lors de la mise à jour de la quantité')
+        setError('An error occurred while updating the quantity')
     }
   }
 
@@ -45,7 +48,6 @@ const Dashboard = ( props ) => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 350,
-    height: 250,
     bgcolor: 'background.paper',
     border: '1px solid #000',
     boxShadow: 24,
@@ -55,38 +57,20 @@ const Dashboard = ( props ) => {
     gap: '30px',
   };
 
-  // useEffect(() => {
-
-  //     const authIdStore = localStorage.getItem('store_id');
-  
-  //     console.log(typeof parseInt(authIdStore));
-  //     console.log('un')
-  //     if (authIdStore) {
-  //       auth.getIdStore(parseInt(authIdStore));
-  //     }
-    
-  // }, []);
-
   useEffect(() => {
     async function fetchData() {
       try {
-
-          // localStorage.setItem('store_id', auth.idStore)
-          // const id = localStorage.getItem('store_id')
-          const id = Cookies.get('store_id')
-        
+        const id = Cookies.get('store_id')
         const response = await getEntity(`stocks/display/${id}`)
         if (response.data.success === true) {
           setStock(response.data.results);
-        } else {
-          setError('Erreur lors de la récupération du stock');
-        }
+        } 
       } catch (err) {
+        setError('Error retrieving stock');
         console.error(err);
       }
     }
     fetchData();
-    
   }, []);
 
   useEffect(() => {
@@ -127,7 +111,7 @@ const Dashboard = ( props ) => {
           {element.price} £
         </Typography>
         <Typography variant="body2">
-          Stock restant: {element.quantity}
+          Remaining stock: {element.quantity}
         </Typography>
       </CardContent>
       <CardActions sx={{ float: 'right' }}>
@@ -154,10 +138,10 @@ const Dashboard = ( props ) => {
             aria-describedby="parent-modal-description"
           >
             <Box sx={style}>
-              <h3 id="parent-modal-title" style={{ fontSize: '1.3rem', textAlign: 'center', fontWeight: 'bolder', m: 5 }}> Editez vos articles !!! </h3>
+              <h3 id="parent-modal-title" style={{ fontSize: '1.3rem', textAlign: 'center', fontWeight: 'bolder', m: 5 }}> Edit your articles!!! </h3>
               <div className='textfield'>
                 <TextField
-                  label='Modifier le stock restant'
+                  label='Edit remaining stock'
                   variant='outlined'
                   type='number'
                   required
@@ -165,13 +149,22 @@ const Dashboard = ( props ) => {
                   onChange={(e) => handleChange(e, "stockRestant")}
                 />
               </div>
+              <div className='textfield'>
+                <TextField
+                  label='Change the price of this item'
+                  variant='outlined'
+                  type='text'
+                  required
+                  value={prix}
+                  onChange={(e) => handleChange(e, "prix")}
+                />
+              </div>
               <div>
                 <Button variant="text" color="secondary" onClick={handleClose} style={{ float: 'right' }}>Cancel</Button>
-                <Button variant="text" color="secondary" style={{ float: 'right' }} onClick={handleEdit}>Continuer</Button>
+                <Button variant="text" color="secondary" style={{ float: 'right' }} onClick={handleEdit}>Continue</Button>
               </div>
             </Box>
           </Modal>
-          {props.data}
         </div> : <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}} > {error ? error : <CircularProgress /> } </Box>
       }
     </>

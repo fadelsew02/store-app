@@ -20,14 +20,11 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [checked, setChecked] = useState(true);
-    const [store_Id, setStore_Id] = useState(null)
 
     const auth = useAuth();
 
     const handleSubmit = async ()=>{
-        
         if(email !== "" && password !== ""){
-  
             try {
                 const response = await postEntity('users/login', {email: email, password: password})
                 if(response.data.success === true){
@@ -41,37 +38,31 @@ const Login = () => {
                         } else if( response.data.role === 'manager'){
                             auth.loginOkay(response.data.results, response.data.token);
                             try{
-                                const reponse = await getEntity(`stores/getStoreId/${response.data.results}`);
-                                if(reponse.data.success === true){
-                                    const storeID = reponse.data.results;
-                                    setStore_Id(reponse.data.results)
-                                    auth.getIdStore(storeID.store_id);
-                                    // localStorage.setItem('store_id', storeID.store_id)
+                                const answer = await getEntity(`stores/getStoreId/${response.data.results.id}`);
+                                if(answer.data.success === true){
+                                    const storeID = answer.data.results;
                                     Cookies.set('store_id', storeID.store_id);
-                                } else {
-                                    setError('Erreur lors de la récupération du storeID')
                                 }
                             } catch (error) {
+                                setError('Error retrieving storeID')
                                 console.error(error);
                             }
                             navigate("/manager", {replace: true}) 
                         } else if(response.data.role === 'customer'){
                             auth.loginOkay(response.data.results, response.data.token);
-                            // auth.getToken(response.data.token)
                             navigate("/customers", {replace: true}) 
                         } else {
                             navigate("*") 
                         }
-                    }, 1500);
+                    }, 1000);
                 } 
             } catch (error) {
-                console.error('Erreur de connexion', error);
+                console.error(error);
                 setError(error.data.message)
             }
         }else{
             setError("All field are required ! ")
         }
-
     }
 
     const handleChange = (e, type) => {
@@ -101,7 +92,7 @@ const Login = () => {
       const handleNavigate = ()=>{
             setTimeout(()=>{
                 navigate("/register", {replace: true})  
-            }, 1500)
+            }, 1000)
       }
 
   return (
@@ -111,7 +102,7 @@ const Login = () => {
         </div>
         <div className='contentBx'>
             <div className='formBx'>
-                <h2>Connectez-vous</h2>
+                <h2>Sign In</h2>
                 <p>{ error !== "" ? <span className="error">{error}</span> : <span></span> }</p>
                 <form>
                     <div className='inputBx'>
@@ -127,7 +118,7 @@ const Login = () => {
                     </div>
                     <div className='inputBx'>
                         <TextField 
-                            label = 'Mot de Passe'
+                            label = 'Password'
                             type='password'  
                             required
                             value={password} 
@@ -135,21 +126,21 @@ const Login = () => {
                             onChange={(e) => handleChange(e,"password")}/>
                     </div>
                     <div className='remember'>
-                        <FormControlLabel control={<Checkbox defaultChecked />} label="Se souvenir de moi" onChange={(event) => handleCheckChange(event)}/>
+                        <FormControlLabel control={<Checkbox defaultChecked />} label="Remember me" onChange={(event) => handleCheckChange(event)}/>
                     </div>
                     <div className='inputBx'>
                         <Button 
                             variant='contained'
                             className='buttonZone'
                             onClick = {handleSubmit}
-                        >Se connectez</Button>
+                        >Login</Button>
                     </div> 
                     <div className='inputBx'>
                         <Button 
                             variant='contained'
                             className='buttonZone'
                             onClick = {handleNavigate}
-                        >Se connecter en tant qu'acheteur</Button>
+                        >Newer ? Sign up here!!!</Button>
                     </div>
                 </form> 
             </div>

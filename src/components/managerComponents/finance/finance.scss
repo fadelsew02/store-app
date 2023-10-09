@@ -1,73 +1,47 @@
 
+.errorDiv{
+    width: 90%;
+    height: 30vh;
+    display: flex;
+    text-align: center;
+    font-size: large;
+}
 .main-financeDiv{
     width: 90%;
     height: 30vh;
     display: flex;
+    box-shadow: 10px 10px 20px black ;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 
-    .capital{
-        width: calc(100% / 3);
-        border-right: 1px solid black ;
-        background-color: #888ECF;
-        
-    .icone{
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .title{
-        font-size: 20px;
-        margin-right: 15px;
-    }
-    
-    .finance-part{
-            font-size: 27px;
-        }
-        
-        // @include myFunction(40px);
-    }
-
-
-    .depenses{
-        width: calc(100% / 3);
-        border-right: 1px solid black ;
-        background-color: #888ECF;
-        
-    .icone{
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .title{
-        font-size: 20px;
-        margin-right: 15px;
-    }
-    
-    .finance-part{
-            font-size: 27px;
-        }
-        // @include myFunction(40px);
-    }
-
-
-    .solde-div{
-        width: calc(100% / 3);
+    .money-div{
+        width: calc(100% / 4);
         border-right: 1px solid black ;
         background-color: #888ECF;
         
         .icone{
             padding: 20px;
+            margin-bottom: 100px;
         }
         
         .title{
-            font-size: 20px;
-            margin-right: 15px;
+            font-size: 19px;
+            margin-inline: 20px;
+            font-weight: bold;
         }
-        
+    
         .finance-part{
-            font-size: 27px;
+            font-size: 24px;
+            font-weight: bold;
         }
-        
-        // @include myFunction(40px);
+    }
+
+    .money-div:nth-child(1) {
+        border-bottom-left-radius: 25px;
+    }
+
+    .money-div:nth-child(4){
+        border-bottom-right-radius: 25px;
     }
 }
 

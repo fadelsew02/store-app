@@ -37,6 +37,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            
 
 
             .ul-profile-div{
@@ -87,13 +88,13 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            left: -25px;
 
             .ul-nav-div{
                 position: absolute;
                 top: 60px;
-                left: -15px;
-                width: 100%;
-    
+                left: -25px;
+                width: 100%;    
     
                 li{
                     position: relative;
@@ -136,11 +137,12 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            left: -25px;
 
             .ul-logout-div{
                 position: absolute;
                 top: 40px;
-                left: -15px;
+                left: -25px;
                 width: 100%;
     
     

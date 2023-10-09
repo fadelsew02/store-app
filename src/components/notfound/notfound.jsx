@@ -25,15 +25,11 @@ const NotFoundPage = () => {
         >
           <ErrorOutlineTwoTone color="error" sx={{ fontSize: 100 }} />
         </motion.div>
-        <Typography variant="h3" gutterBottom>
-          Oops! Page non trouvée
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          La page que vous recherchez semble introuvable.
-        </Typography>
+        <Typography variant="h3" gutterBottom> Oops! Page not found </Typography>
+        <Typography variant="body1" gutterBottom> The page you are looking for cannot be found. </Typography>
         <Link to="/">
           <Button variant="contained" color="primary">
-            Retour à l'accueil
+            Go back home
           </Button>
         </Link>
       </Box>

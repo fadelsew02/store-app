@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
-import Slide from '@mui/material/Slide';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Slide } from '@mui/material';
 import Nav from '../managerComponents/nav/nav';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -12,16 +10,22 @@ const Manager = () => {
 
 
   const handleConfirm = () => {
-    // Supprimez le cookie
     Cookies.remove('token');
     Cookies.remove('store_id');
 
-    // Redirigez vers la page de connexion
     naviget("/login", {replace: true}) 
   }
 
+  const handleClose = () => {
+    setOpen(false)
+
+    window.location.reload()
+  }
+
+ 
+
   const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
+    return <Slide direction="down" ref={ref} {...props} />;
   });
 
   const handleOpen = () => {
@@ -39,12 +43,12 @@ const Manager = () => {
         onClose={() => setOpen(false)}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Confirmation de déconnexion</DialogTitle>
+        <DialogTitle>Disconnect Confirmation</DialogTitle>
         <DialogContent>
-          Êtes-vous sûr de vouloir vous déconnecter ?
+        Are you sure you want to logout ?
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color="primary">
+          <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button onClick={handleConfirm} color="primary">

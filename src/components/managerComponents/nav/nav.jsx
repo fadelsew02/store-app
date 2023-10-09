@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link, NavLink } from 'react-router-dom';
 
-import { MdAccountCircle, MdLogout, MdHome, MdStoreMallDirectory } from "react-icons/md";
+import { MdLogout, MdHome, MdStoreMallDirectory } from "react-icons/md";
+import { Avatar } from "@mui/material"
 import { FaArrowUp, FaBox } from "react-icons/fa";
+import { deepPurple } from '@mui/material/colors';
+
 
 import './nav.scss';
+import Cookies from 'js-cookie';
 
-const Nav = (props) => {
+const Nav = ( props ) => {
 
     useEffect(() => {
         const navigation =  document.querySelector('.navigation')
@@ -16,7 +20,7 @@ const Nav = (props) => {
         toggler.addEventListener('click', function(){
             this.classList.add('active');
             navigation.classList.add('active');
-        })       
+        })  
     },[])
 
   return (
@@ -26,8 +30,8 @@ const Nav = (props) => {
                 <ul className='ul-profile-div'>
                     <li>
                         <Link to='profil' className='lien'>
-                            <span className='icon'><MdAccountCircle style={{fontSize: '40px'}} /></span>
-                            <span className='title'>Mon profil</span>
+                            <span className='icon'><Avatar sx={{ bgcolor: deepPurple[400] }}>{Cookies.get('nom')[0]}{Cookies.get('prenom')[0]}</Avatar></span>
+                            <span className='title'>My profile</span>
                         </Link>
                     </li>
                 </ul>
@@ -37,15 +41,9 @@ const Nav = (props) => {
                     <li>
                         <NavLink to='dashboard'  className='lien'>
                             <span className='icon'><MdHome style={{fontSize: '30px'}} /></span>
-                            <span className='title'>Accueil</span>
+                            <span className='title'>Home</span>
                         </NavLink>
                     </li>
-                    {/* <li>
-                        <NavLink to='finances' className='lien'>
-                            <span className='icon'><MdOutlineAttachMoney style={{fontSize: '30px'}} /></span>
-                            <span className='title'>Finances</span>
-                        </NavLink>
-                    </li> */}
                     <li>
                         <NavLink to='stocks' className='lien'>
                             <span className='icon'><MdStoreMallDirectory style={{fontSize: '30px'}} /></span>
@@ -55,19 +53,19 @@ const Nav = (props) => {
                     <li>
                         <NavLink to='history' className='lien'>
                             <span className='icon'><FaBox style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Historique des commandes</span>
+                            <span className='title'>Order history</span>
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to='ravitailler' className='lien'>
                             <span className='icon'><FaArrowUp style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Se ravitailler</span>
+                            <span className='title'>Refuel</span>
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to='suppliers' className='lien'>
                             <span className='icon'><FaBox style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Fournisseurs</span>
+                            <span className='title'>Suppliers</span>
                         </NavLink>
                     </li>
                 </ul>
@@ -77,7 +75,7 @@ const Nav = (props) => {
                     <li onClick={()=> props.setProps()}>
                         <NavLink to='#' className='lien'>
                             <span className='icon'><MdLogout style={{fontSize: '30px'}}/></span>
-                            <span className='title'>Se déconnecter</span>
+                            <span className='title'>Sign out</span>
                         </NavLink>
                     </li>
                 </ul>

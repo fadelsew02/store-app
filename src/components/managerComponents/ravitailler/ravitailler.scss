@@ -4,6 +4,7 @@ $white: rgba(255,255,255,0.3);
     display: flex;
     gap: 5px;
     width: 100%;
+    overflow: hidden;
 
     .main-container-ravitailler{
         width: calc(100% / 3);

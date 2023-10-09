@@ -17,8 +17,10 @@ export const AuthProvider = ({children}) => {
      *
      * @param {*} id
      */
-    const loginOkay = (id, authToken) => {
-        setLoggedId(id);
+    const loginOkay = (results, authToken) => {
+        setLoggedId(results.id);
+        Cookies.set('nom', results.surname)
+        Cookies.set('prenom', results.firstname)
         setToken(authToken);
         // console.log(authToken)
         // Stocker le token dans le cookie

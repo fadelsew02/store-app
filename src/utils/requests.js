@@ -16,17 +16,12 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use((response) => {
-    // Intercepte la réponse réussie et ajoute un champ supplémentaire
-    //c'est-à-dire que le statut de la réponse est dans la plage 2xx
     if (response.data) {
       response.data.success = true;
     }
     return response;
   }, (err) => {
     const error = err.response;
-    // console.log(err)
-    // error.response.data.success = false;
-    // console.log(error.response.data.success)
     if (error) {
         switch (error.status) {
             case HTTP_STATUS.UNAUTHORIZED:
@@ -51,7 +46,6 @@ axios.interceptors.response.use((response) => {
                 break;
         }
     }
-    // Gère les erreurs de réponse
     return Promise.reject(error);
   });
 
