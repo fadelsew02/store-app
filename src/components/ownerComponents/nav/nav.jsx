@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
-import { MdAccountCircle, MdLogout, MdOutlineAttachMoney, MdHome, MdStoreMallDirectory } from "react-icons/md";
-import { FaArrowUp, FaBox } from "react-icons/fa";
+import { MdLogout } from 'react-icons/md'
+import { FaHome, FaStore, FaUser, FaBell, FaList, FaTruck } from "react-icons/fa";
 
 import './nav.scss';
 
-const Nav = () => {
+const Nav = ( props ) => {
 
     useEffect(() => {
         const navigation =  document.querySelector('.navigation')
@@ -18,67 +18,66 @@ const Nav = () => {
        
     })
 
-
   return (
     <div className='contain'>
         <div className='navigation'>
             <div className='profile-div'>
                 <ul className='ul-profile-div'>
                     <li>
-                        <Link to='#' className='lien'>
+                        {/* <Link to='#' className='lien'>
                             <span className='icon'><MdAccountCircle style={{fontSize: '40px'}} /></span>
                             <span className='title'>Mon profil</span>
-                        </Link>
+                        </Link> */}
                     </li>
                 </ul>
             </div>
             <div className = 'nav-div'>
                 <ul className='ul-nav-div'>
                     <li>
-                        <Link to='/dashboard'  className='lien'>
-                            <span className='icon'><MdHome style={{fontSize: '30px'}} /></span>
-                            <span className='title'>Accueil</span>
-                        </Link>
-                    </li>
-                    {/* <li>
-                        <Link to='#' className='lien'>
-                            <span className='icon'><MdOutlineAttachMoney style={{fontSize: '30px'}} /></span>
-                            <span className='title'>Finances</span>
-                        </Link>
-                    </li> */}
-                    <li>
-                        <Link to='#' className='lien'>
-                            <span className='icon'><MdStoreMallDirectory style={{fontSize: '30px'}} /></span>
-                            <span className='title'>Mes managers</span>
-                        </Link>
+                        <NavLink to='dashboard'  className='lien'>
+                            <span className='icon'><FaHome style={{fontSize: '30px'}} /></span>
+                            <span className='title'>Dashboard</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to='#' className='lien'>
-                            <span className='icon'><FaBox style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Tous les magasins</span>
-                        </Link>
+                        <NavLink to='my-notifications' className='lien'>
+                            <span className='icon'><FaBell style={{fontSize: '30px'}} /></span>
+                            <span className='title'>Notifications</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to='#' className='lien'>
-                            <span className='icon'><FaArrowUp style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Livraisons faites </span>
-                        </Link>
+                        <NavLink to='refuel-and-orders' className='lien'>
+                            <span className='icon'><FaList style={{fontSize: '30px'}} /></span>
+                            <span className='title'>Inventory</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <Link to='#' className='lien'>
-                            <span className='icon'><FaBox style={{fontSize: '24px'}} /></span>
-                            <span className='title'>Fournisseurs</span>
-                        </Link>
+                        <NavLink to='my-stores' className='lien'>
+                            <span className='icon'><FaStore style={{fontSize: '24px'}} /></span>
+                            <span className='title'>All Stores</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to='my-managers' className='lien'>
+                            <span className='icon'><FaUser style={{fontSize: '24px'}} /></span>
+                            <span className='title'>All Managers </span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to='all-suppliers' className='lien'>
+                            <span className='icon'><FaTruck style={{fontSize: '24px'}} /></span>
+                            <span className='title'>All Suppliers</span>
+                        </NavLink>
                     </li>
                 </ul>
             </div>
             <div className='logout-div'>
                 <ul className='ul-logout-div'>
-                    <li>
-                        <Link to='#' className='lien'>
+                    <li onClick={() => props.setProps()}>
+                        <NavLink to='#' className='lien'>
                             <span className='icon'><MdLogout style={{fontSize: '30px'}}/></span>
-                            <span className='title'>Se déconnecter</span>
-                        </Link>
+                            <span className='title'>Log out</span>
+                        </NavLink>
                     </li>
                 </ul>
             </div>
@@ -89,3 +88,4 @@ const Nav = () => {
 }
 
 export default Nav
+

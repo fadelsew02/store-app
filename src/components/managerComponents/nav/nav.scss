@@ -1,22 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@1,9..40,900&display=swap');
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'DM Sans', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-
-
-.contain{
+.contain-manager{
     height: 100vh;
     position: relative;
 
-    .navigation.active{
+    .navigation-manager.active{
         width: 400px;
     }
 
-    .navigation{
+    .navigation-manager{
         position: relative;
         z-index: 10;
         display: flex;
@@ -31,7 +21,7 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         transition: 0.5s;
 
-        .profile-div{
+        .profile-div-manager{
             height: 15%;
             display: flex;
             justify-content: center;
@@ -40,7 +30,7 @@
             
 
 
-            .ul-profile-div{
+            .ul-profile-div-manager{
                 position: absolute;
                 top: 40px;
                 left: -15px;
@@ -52,7 +42,7 @@
                     list-style: none;
                     width: 100%;
     
-                    .lien{
+                    .lien-manager{
                         position: relative;
                         display: block;
                         width: 100%;
@@ -82,18 +72,16 @@
             }
         }
 
-        .nav-div{
+        .nav-div-manager{
             height: 70%;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            left: -25px;
 
-            .ul-nav-div{
+            .ul-nav-div-manager{
                 position: absolute;
-                top: 60px;
-                left: -25px;
+                left: -40px;
                 width: 100%;    
     
                 li{
@@ -101,7 +89,7 @@
                     list-style: none;
                     width: 100%;
     
-                    .lien{
+                    .lien-manager{
                         position: relative;
                         display: block;
                         width: 100%;
@@ -131,18 +119,17 @@
             }
         }
 
-        .logout-div{
+        .logout-div-manager{
             height: 15%;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            left: -25px;
 
-            .ul-logout-div{
+            .ul-logout-div-manager{
                 position: absolute;
                 top: 40px;
-                left: -25px;
+                left: -40px;
                 width: 100%;
     
     
@@ -151,7 +138,7 @@
                     list-style: none;
                     width: 100%;
     
-                    .lien{
+                    .lien-manager{
                         position: relative;
                         display: block;
                         width: 100%;

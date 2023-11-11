@@ -1,0 +1,6 @@
+.card_div{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 7px;  
+    margin-inline: 10px;
+}

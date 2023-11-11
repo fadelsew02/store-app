@@ -1,1 +1,1 @@
-.containerPanier{width:100%;display:grid;grid-template-columns:repeat(5, 1fr);grid-gap:10px;margin:15px}
+.containerPanier{width:100%;display:grid;grid-template-columns:repeat(5, 1fr);grid-gap:10px;margin:15px}.cart-icon-container{display:flex;flex-direction:column;align-items:center;justify-content:center;animation:shake .5s backwards;text-align:center;font-size:35px}@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-15px)}50%{transform:translateX(15px)}75%{transform:translateX(-25px)}100%{transform:translateX(25px)}}

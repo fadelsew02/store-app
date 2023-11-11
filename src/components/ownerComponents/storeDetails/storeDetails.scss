@@ -1,0 +1,31 @@
+.main-box{
+    width: 100%;
+    background-color: red;
+    height: 100vh;
+
+
+    .ensemble{
+        display: flex;
+        height: 50%;
+        border: 2px solid black;
+        display: flex;
+
+        .div-store{
+            grid-area: "cardStore";
+            background-color: blue;
+            width: 35%;
+        }
+    }
+    // .div_purchases {
+    //     grid-area: "customer";
+    //     background-color: red;
+    // }
+                        
+    // .div_inventory{
+    //     grid-area: "inventory";
+    //     background-color: black;
+    //     width: 50%;
+    // }
+                        
+                    
+}

@@ -31,7 +31,7 @@ const Customer = () => {
 
 
   return (
-    <div className = 'customer-page' style={{display:'flex'}}>
+    <div className = 'customer-page' style={{display:'flex', overflow: 'hidden', height: '100vh'}}>
       <Nav setProps={handleOpen} />
       <Outlet/>
       <Dialog 

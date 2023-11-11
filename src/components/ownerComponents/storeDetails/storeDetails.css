@@ -1,0 +1,1 @@
+.main-box{width:100%;background-color:red;height:100vh}.main-box .ensemble{display:flex;height:50%;border:2px solid #000;display:flex}.main-box .ensemble .div-store{grid-area:"cardStore";background-color:blue;width:35%}
